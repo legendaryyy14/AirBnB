@@ -2,7 +2,7 @@
 
 ## Database Schema Design
 
-![Alt text](../Screen%20Shot%202023-05-24%20at%2010.29.45%20PM.png)
+![Screen Shot 2023-05-24 at 10 29 45 PM](https://github.com/legendaryyy14/AirBnB/assets/115032191/358d9beb-374a-4e54-9460-5e5648babf1a)
 
 ## API Documentation
 
