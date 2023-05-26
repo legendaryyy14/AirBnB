@@ -1,10 +1,8 @@
 # AirBnB
 
-# `<name of application here>`
-
 ## Database Schema Design
 
-`<insert database schema design here>`
+![Alt text](../Screen%20Shot%202023-05-24%20at%2010.29.45%20PM.png)
 
 ## API Documentation
 
