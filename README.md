@@ -52,7 +52,7 @@ Returns the information about the current user that is logged in.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /userss/:userId
+  * URL: /users/:userId
   * Body: none
 
 * Successful Response when there is a logged in user
@@ -289,7 +289,7 @@ Returns all the spots owned (created) by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /users/:user/spots
+  * URL: /users/:userId/spots
   * Body: none
 
 * Successful Response
@@ -329,7 +329,7 @@ Returns the details of a spot specified by its id.
 * Require Authentication: false
 * Request
   * Method: GET
-  * URL: /spots/:SpotId
+  * URL: /spots/:spotId
   * Body: none
 
 * Successful Response
@@ -984,7 +984,7 @@ Return all the bookings that the current user has made.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /bookings/:userId
+  * URL: /users/:userId/bookings
   * Body: none
 
 * Successful Response
@@ -1176,7 +1176,7 @@ Update and return an existing booking.
 * Require proper authorization: Booking must belong to the current user
 * Request
   * Method: PUT
-  * URL: /users/:userId/bookings/:bookingId
+  * URL: /bookings/:bookingId
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -1270,7 +1270,7 @@ Delete an existing booking.
   Spot must belong to the current user
 * Request
   * Method: DELETE
-  * URL: users/:userId/bookings/:id
+  * URL: /bookings/:bookingId
   * Body: none
 
 * Successful Response
@@ -1319,7 +1319,7 @@ Delete an existing image for a Spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: DELETE
-  * URL: /spots/:spotImageId
+  * URL: /spots/:spotId/images/:spotImageId
   * Body: none
 
 * Successful Response
