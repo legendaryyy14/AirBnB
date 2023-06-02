@@ -2,7 +2,7 @@
 
 ## Database Schema Design
 
-![Screen Shot 2023-05-25 at 10 45 56 PM](https://github.com/legendaryyy14/AirBnB/assets/115032191/1dcb8cf1-2f42-4635-9af7-cf6c49ddd83a)
+![Screen Shot 2023-06-01 at 8 58 23 PM](https://github.com/legendaryyy14/AirBnB/assets/115032191/147b62c4-8a92-4fa8-b023-e48c8d4fc784)
 
 
 
