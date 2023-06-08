@@ -33,6 +33,20 @@ router.post(
     validateSignup,
     async (req, res) => {
       const { firstName, lastName, email, password, username } = req.body;
+
+      try {
+        const existingUser = await User.findOne({
+          where: {
+            email: email
+          }
+        });
+
+      if (existingUser) {
+        return res.status(500).res.json({
+          errors: ['Email already exists.']
+        })
+      };
+
       const hashedPassword = bcrypt.hashSync(password);
       const user = await User.create({ firstName, lastName, email, username, hashedPassword });
 
@@ -49,9 +63,15 @@ router.post(
       return res.json({
         user: safeUser
       });
+    } catch (error) {
+      console.error('Error:', error);
+      return res.status(500).json({ errors: ['An error occured.'] })
+    }
     }
   );
 
+router.get('/:userId', async (req, res) => {
 
+})
 
 module.exports = router;
