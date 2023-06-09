@@ -36,6 +36,14 @@ router.post(
         }
       });
 
+      if (credential === '' || password === '') res.status(400).json({
+        message: 'Bad request',
+        errors: {
+          credential: "Email or username is required",
+          password: "Password is required"
+        }
+      })
+
       if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
         const err = new Error('Login failed');
         err.status = 401;

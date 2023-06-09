@@ -34,7 +34,6 @@ router.post(
     async (req, res) => {
       const { firstName, lastName, email, password, username } = req.body;
 
-      try {
         const existingUser = await User.findOne({
           where: {
             email: email
@@ -63,15 +62,16 @@ router.post(
       return res.json({
         user: safeUser
       });
-    } catch (error) {
-      console.error('Error:', error);
-      return res.status(500).json({ errors: ['An error occured.'] })
-    }
     }
   );
 
 router.get('/:userId', async (req, res) => {
+  const user = await User.findByPk(req.params.userId)
 
+  if(!user) {
+    return res.status(200).json({user})
+  }
+  res.json(user)
 })
 
 module.exports = router;

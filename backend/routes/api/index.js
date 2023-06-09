@@ -12,6 +12,7 @@ router.use('/session', sessionRouter);
 
 router.use('/users', usersRouter);
 
+
 // router.use('/spots', spotsRouter);
 
 router.post('/test', (req, res) => {
