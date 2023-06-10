@@ -78,7 +78,7 @@ router.delete(
 
 router.get(
     '/',
-    (req, res) => {
+    async (req, res) => {
       const { user } = req;
       if (user) {
         const safeUser = {

@@ -8,7 +8,7 @@ if (process.env.NODE_ENV === 'production') {
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  up: async (queryInterface, Sequelize) => {
     /**
      * Add seed commands here.
      *
@@ -22,26 +22,26 @@ module.exports = {
    return queryInterface.bulkInsert(options, [
     {
       spotId: 1,
-      userId: 1,
-      startDate: new Date('2023-06-10'),
-      endDate: new Date('2023-06-15')
+      userId: 4,
+      startDate: '2023-06-10',
+      endDate: '2023-06-15'
     },
     {
       spotId: 2,
-      userId: 2,
-      startDate: new Date('2023-07-01'),
-      endDate: new Date('2023-07-05')
+      userId: 5,
+      startDate: '2023-07-01',
+      endDate: '2023-07-05'
     },
     {
       spotId: 3,
-      userId: 3,
-      startDate: new Date('2023-08-20'),
-      endDate: new Date('2023-08-25')
+      userId: 6,
+      startDate: '2023-08-20',
+      endDate: '2023-08-25'
     }
    ])
   },
 
-  async down (queryInterface, Sequelize) {
+  down: async (queryInterface, Sequelize) => {
     /**
      * Add commands to revert seed here.
      *

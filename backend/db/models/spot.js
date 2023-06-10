@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const { all } = require('../../routes/api/spots');
 module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
     /**
@@ -26,17 +27,52 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Spot.init({
-    ownerId: DataTypes.INTEGER,
-    address: DataTypes.STRING,
-    city: DataTypes.STRING,
-    state: DataTypes.STRING,
-    country: DataTypes.STRING,
-    lat: DataTypes.DECIMAL,
-    lng: DataTypes.DECIMAL,
-    name: DataTypes.STRING,
-    description: DataTypes.STRING,
-    price: DataTypes.DECIMAL,
-    avgRating: DataTypes.DECIMAL
+    ownerId: {
+      type: DataTypes.INTEGER
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    city: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    state: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    country: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    lat: {
+      type: DataTypes.DECIMAL,
+      allowNull: false
+    },
+    lng: {
+      type: DataTypes.DECIMAL,
+      allowNull: false
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: [0, 50]
+      }
+
+    },
+    description: {
+      Type: DataTypes.STRING,
+      allowNull: false
+      },
+    price: {
+      Type: DataTypes.DECIMAL,
+      allowNull: false
+    },
+    avgRating: {
+      Type: DataTypes.DECIMAL
+    }
   }, {
     sequelize,
     modelName: 'Spot',
