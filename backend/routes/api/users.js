@@ -41,8 +41,11 @@ router.post(
         });
 
       if (existingUser) {
-        return res.status(500).res.json({
-          errors: ['Email already exists.']
+        return res.status(500).json({
+          message: "User already exists",
+          errors: {
+            email: "User with that email already exists"
+          }
         })
       };
 
@@ -65,13 +68,6 @@ router.post(
     }
   );
 
-router.get('/:userId', async (req, res) => {
-  const user = await User.findByPk(req.params.userId)
 
-  if(!user) {
-    return res.status(200).json({user})
-  }
-  res.json(user)
-})
 
 module.exports = router;
