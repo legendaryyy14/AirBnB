@@ -13,8 +13,9 @@ const validateSpot = [
       .exists({ checkFalsy: true })
       .notEmpty()
       .withMessage("Street address is required"),
-    check("city")
+    check('city')
       .exists({ checkFalsy: true })
+      .notEmpty()
       .withMessage("City is required"),
     check("state")
       .exists({ checkFalsy: true })
@@ -75,7 +76,7 @@ router.get('/:spotId', async (req, res) => {
 router.post('/', requireAuth, validateSpot, async (req, res) => {
 
     const { address, city, state, country, lat, lng, name, description, price  } = req.body
-    const ownerId = req.user.dataValues.id,
+    const ownerId = req.user.dataValues.id
     const newSpot = {
         ownerId,
         address,

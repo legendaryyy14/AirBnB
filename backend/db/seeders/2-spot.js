@@ -21,7 +21,7 @@ module.exports = {
     options.tableName = 'Spots';
     return queryInterface.bulkInsert(options, [
       {
-        ownerId: 4,
+        ownerId: 1,
         address: "123 Disney Lane",
         city: "San Francisco",
         state: "California",
@@ -34,7 +34,7 @@ module.exports = {
         avgRating: 4.5,
       },
       {
-        ownerId: 5,
+        ownerId: 2,
         address: "1234 Disney Lane",
         city: "Colorado Springs",
         state: "Colorado",
@@ -47,7 +47,7 @@ module.exports = {
         avgRating: 4.5,
       },
       {
-        ownerId: 6,
+        ownerId: 3,
         address: "123 Seal Ln",
         city: "Los Angeles",
         state: "California",
