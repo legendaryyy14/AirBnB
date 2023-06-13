@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+
 const { all } = require('../../routes/api/spots');
 module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
@@ -71,7 +72,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     avgRating: {
-      Type: DataTypes.DECIMAL
+      Type: DataTypes.DECIMAL,
+      allowNull: true
     }
   }, {
     sequelize,

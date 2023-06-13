@@ -44,7 +44,7 @@ const validateSpot = [
 
 router.get('/', async (req, res) => {
     const spots = await Spot.findAll();
-    return res.status(200).json({spots})
+    return res.status(200).json(spots)
 })
 
 router.get('/current', async (req, res) => {
@@ -73,25 +73,25 @@ router.get('/:spotId', async (req, res) => {
 })
 
 //CREATE A SPOT
-router.post('/', requireAuth, validateSpot, async (req, res) => {
+// router.post('/', requireAuth, validateSpot, async (req, res) => {
 
-    const { address, city, state, country, lat, lng, name, description, price  } = req.body
-    const ownerId = req.user.dataValues.id
-    const newSpot = {
-        ownerId,
-        address,
-        city,
-        state,
-        country,
-        lat,
-        lng,
-        name,
-        description,
-        price
-    }
+//     const { address, city, state, country, lat, lng, name, description, price  } = req.body
+//     const spot = await Spot.create({
+//         ownerId: req.user.id,
+//         address,
+//         city,
+//         state,
+//         country,
+//         lat,
+//         lng,
+//         name,
+//         description,
+//         price
 
-    return res.json(newSpot)
-})
+//     });
+
+//     return res.status(201).json(spot)
+// })
 
 
 module.exports = router;
