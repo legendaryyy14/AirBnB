@@ -3,7 +3,8 @@ const {
   Model
 } = require('sequelize');
 
-const { all } = require('../../routes/api/spots');
+// const { all } = require('../../routes/api/spots');
+
 module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
     /**
@@ -13,17 +14,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Spot.belongsTo(models.User, {foreignKey: "ownerId"}),
+      Spot.belongsTo(models.User, {foreignKey: "ownerId", as: 'Owner'}),
       Spot.hasMany(models.SpotImage, {foreignKey: "spotId"}),
       Spot.belongsToMany(models.User, {
         through: "Bookings",
         foreignKey: "spotId",
         otherKey: "userId"
       }),
-      Spot.belongsToMany(models.User, {
-        through: "Reviews",
-        foreignKey: "spotId",
-        otherKey: "userId"
+      Spot.hasMany(models.Review, {
+        foreignKey: "spotId"
       })
     }
   }
@@ -61,18 +60,17 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         len: [0, 50]
       }
-
     },
     description: {
-      Type: DataTypes.STRING,
+      type: DataTypes.STRING,
       allowNull: false
       },
     price: {
-      Type: DataTypes.DECIMAL,
+      type: DataTypes.DECIMAL,
       allowNull: false
     },
     avgRating: {
-      Type: DataTypes.DECIMAL,
+      type: DataTypes.DECIMAL,
       allowNull: true
     }
   }, {

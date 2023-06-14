@@ -28,6 +28,7 @@ const validateSignup = [
     handleValidationErrors
   ];
 
+  // SIGN UP
 router.post(
     '/',
     validateSignup,
@@ -67,6 +68,7 @@ router.post(
       });
     }
   );
+
 
 
 
