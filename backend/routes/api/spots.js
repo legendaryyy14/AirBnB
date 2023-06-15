@@ -41,6 +41,18 @@ const validateSpot = [
     handleValidationErrors
   ];
 
+  const validateReview = [
+    check('review')
+      .exists({ checkFalsy: true })
+      .notEmpty()
+      .withMessage('Review text is required'),
+    check('stars')
+      .exists({ checkFalsy: true })
+      .notEmpty()
+      .withMessage('Stars must be an integer from 1 to 5'),
+    handleValidationErrors
+  ];
+
 //Get All Spots
 router.get('/', async (req, res) => {
     const spotsArr = await Spot.findAll();
@@ -70,8 +82,7 @@ router.get('/:spotId', async (req, res) => {
         attributes: ['id', 'url', 'preview']
       },
       {
-        model: User,
-        as: 'Owner',
+        model: 'Owner',
         attributes: ['id', 'firstName', 'lastName']
       },
       {
@@ -101,6 +112,30 @@ router.get('/:spotId', async (req, res) => {
     }
 
     return res.status(200).json(spot);
+});
+
+
+//Get all Reviews by a Spot's id
+router.get('/:spotId/reviews', async (req, res) => {
+  const spot = await Spot.findByPk(req.params.spotId)
+
+  if (!spot) {
+    return res.status(404).json({
+    "message": "Spot couldn't be found"
+  })
+}
+
+  const reviews = await Review.findAll({
+    where: {
+      spotId: req.params.spotId
+    },
+    include: [{
+      model: ReviewImage,
+      attributes: ['id', 'url']
+    }]
+  })
+
+  res.status(200).json(reviews)
 })
 
 //CREATE A SPOT
@@ -136,6 +171,29 @@ if(!req.params.spotId) res.status(404).json({message: "Spot couldn't be found"})
   })
 
 return res.status(200).json(image)
+})
+
+//Create a Review for a Spot based on the Spot's id
+router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res) => {
+  const { review, stars } = req.body;
+  const { user } = req;
+  const spot = await Spot.findByPk(req.params.spotId)
+
+  if (!spot) {
+    return res.status(404).json({
+    message: "Spot couldn't be found"
+  })
+}
+
+  const newReview = await Review.create({
+    userId: user.id,
+    spotId: req.params.spotId,
+    review,
+    stars
+  })
+
+  return res.status(201).json(newReview)
+
 })
 
 //Edit a Spot
@@ -186,20 +244,16 @@ router.put('/:spotId', requireAuth, async (req, res) => {
 //Delete a Spot
 router.delete("/:spotId", requireAuth, async (req, res) => {
   const spot = await Spot.findByPk(req.params.spotId);
-
+console.log("here:", spot)
   if (!spot) {
     return res.status(404).json({
       message: "Spot couldn't be found"
     })
+  } else {
+    await spot.destroy();
   }
 
-  await Spot.destroy({
-    where: {
-      id: {[Op.lte]: req.params.spotId}
-    }
-  });
   return res.status(200).json(spot)
 })
-
 
 module.exports = router;
