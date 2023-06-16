@@ -1,11 +1,12 @@
 const express = require('express');
-const { Op, fn, col} = require('sequelize');
+const { Op } = require('sequelize');
+const sequelize = require('sequelize');
 const bcrypt = require('bcryptjs');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const { setTokenCookie, requireAuth} = require('../../utils/auth');
-const { User, Spot, SpotImage, Review, ReviewImage } = require('../../db/models');
+const { User, Spot, SpotImage, Review, ReviewImage, Booking } = require('../../db/models');
 const router = express.Router();
 
 const validateSpot = [
@@ -55,10 +56,40 @@ const validateSpot = [
 
 //Get All Spots
 router.get('/', async (req, res) => {
+  let avgRating = sequelize.fn('AVG', sequelize.col('Reviews.stars'));
     const spotsArr = await Spot.findAll();
     const spots = spotsArr.map(element => element.dataValues);
+    spots.avgRating = avgRating;
 
     return res.status(200).json({Spots: spots})
+
+    // let avgRating = sequelize.fn('AVG', sequelize.col('Reviews.stars'));
+
+    // const spots = await Spot.findAll({
+    //   group: ['Spot.Id'],
+    //   include: [{
+    //     model: Review,
+    //     attributes: []
+    //   }],
+    //   attributes: [
+    //     'id',
+    //     'ownerId',
+    //     'address',
+    //     'city',
+    //     'state',
+    //     'country',
+    //     'lat',
+    //     'lng',
+    //     'name',
+    //     'description',
+    //     'price',
+    //     'createdAt',
+    //     'updatedAt',
+    //     [avgRating, 'avgRating']
+    //   ]
+    // });
+
+    // return res.status(200).json(spots)
 })
 
 //Get all Spots owned by the Current User
@@ -82,7 +113,8 @@ router.get('/:spotId', async (req, res) => {
         attributes: ['id', 'url', 'preview']
       },
       {
-        model: 'Owner',
+        model: User,
+        as: 'Owner',
         attributes: ['id', 'firstName', 'lastName']
       },
       {
@@ -93,11 +125,11 @@ router.get('/:spotId', async (req, res) => {
     attributes: {
       include: [
         [
-          fn("COUNT", col("Reviews.id")),
+          sequelize.fn("COUNT", sequelize.col("Reviews.id")),
           "numReviews"
         ],
         [
-          fn("AVG", col("Reviews.stars")),
+          sequelize.fn("AVG", sequelize.col("Reviews.stars")),
           "avgStarRating"
         ]
       ]
@@ -135,8 +167,43 @@ router.get('/:spotId/reviews', async (req, res) => {
     }]
   })
 
-  res.status(200).json(reviews)
+  return res.status(200).json(reviews)
 })
+
+//Get all Bookings for a Spot based on the Spot's id
+router.get('/:spotId/bookings', requireAuth, async (req, res) => {
+  const spot = await Spot.findByPk(req.params.spotId);
+  const { user } = req
+  if (!spot) {
+    res.status(404).json({
+      "message": "Spot couldn't be found"
+    })
+  }
+
+  if (user.id !== spot.ownerId) {
+    const bookings = await Booking.findAll({
+      where: {
+        spotId: req.params.spotId
+      },
+      attributes: ['spotId', 'startDate', 'endDate']
+
+    })
+    return res.status(200).json(bookings)
+  } else {
+    const bookings = await Booking.findAll({
+      where: {
+        spotId: req.params.spotId
+      },
+      include: {
+        model: User,
+        attributes: ['id', 'firstName', 'lastName']
+      }
+    })
+    return res.status(200).json({Bookings: bookings})
+  }
+
+})
+
 
 //CREATE A SPOT
 router.post('/', requireAuth, validateSpot, async (req, res) => {
@@ -249,11 +316,18 @@ console.log("here:", spot)
     return res.status(404).json({
       message: "Spot couldn't be found"
     })
-  } else {
-    await spot.destroy();
   }
 
-  return res.status(200).json(spot)
+  if (req.user.id === spot.ownerId) {
+    await spot.destroy();
+    return res.status(200).json({
+      "message": "Successfully deleted"
+    })
+  } else {
+    return res.status(403).json({
+        message: "Unauthorized to delete this review"
+    });
+}
 })
 
 module.exports = router;

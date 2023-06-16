@@ -5,17 +5,27 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       // define association here
-      User.hasMany(models.Spot, {foreignKey: "ownerId"}),
-      User.belongsToMany(models.Spot, {
-        through: "Bookings",
-        foreignKey: "userId",
-        otherKey: "spotId"
-      }),
-      User.belongsToMany(models.Spot, {
-        through: "Reviews",
-        foreignKey: "userId",
-        otherKey: "spotId"
-      })
+      User.hasMany(models.Spot, {foreignKey: "ownerId", hooks: true}),
+      User.hasMany(models.Booking, {
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
+        hooks: true
+      });
+      User.hasMany(models.Review, {
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
+        hooks: true
+      });
+      // User.belongsToMany(models.Spot, {
+      //   through: "Bookings",
+      //   foreignKey: "userId",
+      //   otherKey: "spotId"
+      // }),
+      // User.belongsToMany(models.Spot, {
+      //   through: "Reviews",
+      //   foreignKey: "userId",
+      //   otherKey: "spotId"
+      // })
     }
   };
 

@@ -37,10 +37,6 @@ router.get('/current', requireAuth, async (req, res) => {
             where: {
                 ownerId: user.id
             },
-            include:[{
-                model: SpotImage,
-                attributes: ['url']
-            }],
             attributes: ['id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price']
         },
         {
@@ -49,6 +45,21 @@ router.get('/current', requireAuth, async (req, res) => {
         }
       ]
     })
+
+    for (let i = 0; i < reviews.length; i++) {
+        const el = reviews[i];
+        const spotId = el.spotId;
+        const previewImage = await SpotImage.findOne({
+          where: {
+            spotId: spotId,
+            preview: true
+          }
+        });
+
+        if (previewImage) {
+          el.Spot.dataValues.previewImage = previewImage.url;
+        }
+      }
     return res.status(200).json({Reviews: reviews})
   })
 
