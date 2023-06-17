@@ -64,7 +64,7 @@ router.put('/:bookingId', requireAuth, async (req, res) => {
           }
       })
 
-      if (booking.endDate < startDate) {
+      if (booking.endDate < Date()) {
           return res.status(403).json({
               message: "Past bookings can't be modified"
             })
@@ -110,7 +110,7 @@ router.put('/:bookingId', requireAuth, async (req, res) => {
 
     } else {
           return res.status(403).json({
-            message: "Unauthorized"
+            message: "Unauthorized to delete this booking"
         });
     }
 

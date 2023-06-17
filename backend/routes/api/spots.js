@@ -468,7 +468,7 @@ router.delete("/:spotId", requireAuth, async (req, res) => {
     })
   } else {
     return res.status(403).json({
-        message: "Unauthorized to delete this review"
+        message: "Unauthorized to delete this spot"
     });
 }
 })
