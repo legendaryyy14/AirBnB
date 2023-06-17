@@ -81,20 +81,27 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
             reviewId: req.params.reviewId
         }
     })
+    if (req.user.id === review.userId) {
 
-    if (revImages.length < 10) {
-            const newImage = await ReviewImage.create({
-        url,
-        reviewId: review.id
-    })
-        return res.status(200).json({
-            id: newImage.id,
-            url: newImage.url
-        })
-    } else {
-        return res.status(403).json({
-            message: "Maximum number of images for this resource was reached"
+      if (revImages.length < 10) {
+              const newImage = await ReviewImage.create({
+          url,
+          reviewId: review.id
+      })
+          return res.status(200).json({
+              id: newImage.id,
+              url: newImage.url
           })
+      } else {
+          return res.status(403).json({
+              message: "Maximum number of images for this resource was reached"
+            })
+      }
+
+    } else {
+      return res.status(403).json({
+        message: "Unauthorized"
+    });
     }
 
 })
@@ -109,12 +116,19 @@ router.put('/:reviewId', requireAuth, validateReview, async (req, res) => {
           })
     }
 
-    if (review) existingReview.review = review;
-    if (stars) existingReview.stars = stars;
+    if (req.user.id === existingReview.userId) {
+      if (review) existingReview.review = review;
+      if (stars) existingReview.stars = stars;
 
-    await existingReview.save();
+      await existingReview.save();
 
-    return res.status(200).json(existingReview)
+      return res.status(200).json(existingReview)
+
+    } else {
+      return res.status(403).json({
+        message: "Unauthorized"
+    });
+    }
 
 })
 
