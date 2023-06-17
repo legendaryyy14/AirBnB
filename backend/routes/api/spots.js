@@ -155,7 +155,7 @@ router.get('/:spotId', async (req, res) => {
       },
       {
         model: Review,
-        attributes: ['id', 'spotId']
+        attributes: []
       }
     ],
     attributes: {
