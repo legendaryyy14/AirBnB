@@ -56,12 +56,33 @@ const validateSpot = [
 
 //Get All Spots
 router.get('/', async (req, res) => {
+
+  let { page, size } = req.query;
+
+  if (!page) page = 1;
+  if (!size) size = 20;
+  if (page > 10) page = 1;
+  if (size > 20) size = 20;
+
+  page = parseInt(page);
+  size = parseInt(size);
+
+  let pagination = {
+      limit: size,
+      offset: size * (page - 1)
+  }
+  let results = {}
   let avgRating = sequelize.fn('AVG', sequelize.col('Reviews.stars'));
     const spotsArr = await Spot.findAll();
     const spots = spotsArr.map(element => element.dataValues);
     spots.avgRating = avgRating;
 
-    return res.status(200).json({Spots: spots})
+
+  results.Spots = spots;
+  results.page = page;
+  results.size = size;
+  res.status(200).json(results);
+});
 
     // let avgRating = sequelize.fn('AVG', sequelize.col('Reviews.stars'));
 
@@ -90,16 +111,31 @@ router.get('/', async (req, res) => {
     // });
 
     // return res.status(200).json(spots)
-})
+
 
 //Get all Spots owned by the Current User
-router.get('/current', async (req, res) => {
+router.get('/current', requireAuth, async (req, res) => {
     const { user } = req;
     const spots = await Spot.findAll({
         where: {
             ownerId: user.id
         }
-    })
+    });
+
+    for (let i = 0; i < spots.length; i++) {
+      const spot = spots[i];
+      const spotId = spot.id;
+      const previewImage = await SpotImage.findOne({
+        where: {
+          spotId: spotId,
+          preview: true
+        }
+      });
+
+      if (previewImage) {
+        spot.dataValues.previewImage = previewImage.url;
+      }
+    }
 
     return res.status(200).json({Spots: spots})
 })
@@ -229,15 +265,30 @@ router.post('/', requireAuth, validateSpot, async (req, res) => {
 //Add an Image to a Spot based on the Spot's id
 router.post('/:spotId/images', requireAuth, async (req, res) => {
   const {url, preview} = req.body;
+  const spot = await Spot.findByPk(req.params.spotId)
 if(!req.params.spotId) res.status(404).json({message: "Spot couldn't be found"})
 
+if(req.user.id === spot.id) {
   const image = await SpotImage.create({
     url,
     preview,
     spotId: req.params.spotId
   })
 
-return res.status(200).json(image)
+  const imgRes = await SpotImage.findOne({
+    where: {
+      id: image.id
+    },
+    attributes: ['id', 'url', 'preview']
+  })
+
+return res.status(200).json(imgRes)
+
+} else {
+  return res.status(403).json({
+    message: "Unauthorized"
+});
+}
 })
 
 //Create a Booking from a Spot based on the Spot's id
@@ -332,54 +383,61 @@ router.put('/:spotId', requireAuth, async (req, res) => {
   }
   const { address, city, state, country, lat, lng, name, description, price } = req.body;
 
-  if (address) {
-    spot.address = address;
-  }
-  if (city) {
-    spot.city = city;
-  }
-  if (state) {
-    spot.state = state;
-  }
-  if (country) {
-    spot.country = country;
-  }
-  if (lat) {
-    spot.lat = lat;
-  }
-  if (lng) {
-    spot.lng = lng;
-  }
-  if (name) {
-    spot.name = name;
-  }
-  if (description) {
-    spot.description = description;
-  }
-  if (price) {
-    spot.price = price;
-  }
+  if (req.user.id === spot.id) {
+    if (address) {
+      spot.address = address;
+    }
+    if (city) {
+      spot.city = city;
+    }
+    if (state) {
+      spot.state = state;
+    }
+    if (country) {
+      spot.country = country;
+    }
+    if (lat) {
+      spot.lat = lat;
+    }
+    if (lng) {
+      spot.lng = lng;
+    }
+    if (name) {
+      spot.name = name;
+    }
+    if (description) {
+      spot.description = description;
+    }
+    if (price) {
+      spot.price = price;
+    }
 
-  await spot.save();
+    await spot.save();
 
-  return res.status(200).json(spot)
+    return res.status(200).json(spot)
+
+  } else {
+    return res.status(403).json({
+      message: "Unauthorized"
+  });
+  }
 
 });
 
 //Delete a Spot
 router.delete("/:spotId", requireAuth, async (req, res) => {
   const spot = await Spot.findByPk(req.params.spotId);
-console.log("here:", spot)
+
   if (!spot) {
     return res.status(404).json({
       message: "Spot couldn't be found"
     })
   }
-
+ console.log(spot)
   if (req.user.id === spot.ownerId) {
     await spot.destroy();
     return res.status(200).json({
-      "message": "Successfully deleted"
+      message: "Successfully deleted"
     })
   } else {
     return res.status(403).json({

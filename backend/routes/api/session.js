@@ -76,6 +76,7 @@ router.delete(
   }
 );
 
+//Get the Current User
 router.get(
     '/',
     async (req, res) => {
