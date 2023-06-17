@@ -18,9 +18,6 @@ router.get('/current', requireAuth, async (req, res) => {
         include: [
             {
                 model: Spot,
-                where: {
-                    ownerId: user.id
-                },
                 attributes: ['id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price']
 
             }
@@ -139,7 +136,7 @@ router.delete('/:bookingId', requireAuth, async (req, res) => {
           })
     } else {
         return res.status(403).json({
-            message: "Unauthorized to delete this review"
+            message: "Unauthorized to delete this booking"
         });
     }
 })
