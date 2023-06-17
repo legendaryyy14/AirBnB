@@ -1,11 +1,8 @@
 'use strict';
 
-let options = {};
-if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA;  // define your schema in options object
-}
 
-/** @type {import('sequelize-cli').Migration} */
+
+// /** @type {import('sequelize-cli').Migration} */
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
@@ -20,7 +17,7 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-<<<<<<<<< Temporary merge branch 1
+
     options.tableName = "Users";
     await queryInterface.addColumn(options, 'firstName', {
       type: Sequelize.STRING
