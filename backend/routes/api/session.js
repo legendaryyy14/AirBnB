@@ -36,6 +36,14 @@ router.post(
         }
       });
 
+      if (credential === '' || password === '') res.status(400).json({
+        message: 'Bad request',
+        errors: {
+          credential: "Email or username is required",
+          password: "Password is required"
+        }
+      })
+
       if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
         const err = new Error('Login failed');
         err.status = 401;
@@ -46,8 +54,10 @@ router.post(
 
       const safeUser = {
         id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
-        username: user.username,
+        username: user.username
       };
 
       await setTokenCookie(res, safeUser);
@@ -66,13 +76,16 @@ router.delete(
   }
 );
 
+//Get the Current User
 router.get(
     '/',
-    (req, res) => {
+    async (req, res) => {
       const { user } = req;
       if (user) {
         const safeUser = {
           id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
           email: user.email,
           username: user.username,
         };
