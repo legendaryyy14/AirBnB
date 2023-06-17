@@ -77,6 +77,20 @@ router.get('/', async (req, res) => {
     const spots = spotsArr.map(element => element.dataValues);
     spots.avgRating = avgRating;
 
+    for (let i = 0; i < spots.length; i++) {
+      const spot = spots[i];
+      const spotId = spot.id;
+      const previewImage = await SpotImage.findOne({
+        where: {
+          spotId: spotId,
+          preview: true
+        }
+      });
+
+      if (previewImage) {
+        spot.previewImage = previewImage.url;
+      }
+    }
 
   results.Spots = spots;
   results.page = page;
