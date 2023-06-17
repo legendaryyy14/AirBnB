@@ -20,6 +20,7 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
+<<<<<<<<< Temporary merge branch 1
     options.tableName = "Users";
     await queryInterface.addColumn(options, 'firstName', {
       type: Sequelize.STRING
