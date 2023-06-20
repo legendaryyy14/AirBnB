@@ -107,7 +107,7 @@ router.put('/:bookingId', requireAuth, async (req, res) => {
 
     } else {
           return res.status(403).json({
-            message: "Unauthorized to delete this booking"
+            message: "Unauthorized to edit this booking"
         });
     }
 
