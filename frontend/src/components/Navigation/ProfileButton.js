@@ -10,22 +10,26 @@ function ProfileButton({ user }) {
     dispatch(sessionActions.logout());
   };
 
-  const ulClassName = "profile-dropdown";
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+
+  const handleButtonClick = () => {
+    setIsDropdownVisible(!isDropdownVisible);
+  };
 
   return (
-    <>
-      <button>
-        <i className="fas fa-user-circle" />
-      </button>
-      <ul className="profile-dropdown">
-        <li>{user.username}</li>
-        <li>{user.firstName} {user.lastName}</li>
-        <li>{user.email}</li>
-        <li>
-          <button onClick={logout}>Log Out</button>
-        </li>
-      </ul>
-    </>
+    <div className="profile-button">
+      <button className="fas fa-user-circle" onClick={handleButtonClick} />
+      {isDropdownVisible && (
+        <ul className="profile-dropdown">
+          <li>{user.username}</li>
+          <li>{user.firstName} {user.lastName}</li>
+          <li>{user.email}</li>
+          <li>
+            <button onClick={logout}>Log Out</button>
+          </li>
+        </ul>
+      )}
+    </div>
   );
 }
 

@@ -19,7 +19,6 @@ function Navigation({ isLoaded }){
     sessionLinks = (
       <li>
         <ProfileButton user={sessionUser} />
-        <button onClick={logout}>Log Out</button>
       </li>
     );
   } else {
@@ -33,7 +32,7 @@ function Navigation({ isLoaded }){
 
   return (
     <ul>
-      <li>
+      <li className="home">
         <NavLink exact to="/">Home</NavLink>
       </li>
       {isLoaded && sessionLinks}
