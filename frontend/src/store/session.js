@@ -1,4 +1,3 @@
-import { combineReducers } from "redux";
 import { csrfFetch } from "./csrf";
 
 const SET_SESSION_USER = "session/setSessionUser";
@@ -44,6 +43,23 @@ export const restoreUser = () => async (dispatch) => {
         return errors
     }
 }
+
+export const signup = (user) => async (dispatch) => {
+    const { username, firstName, lastName, email, password } = user;
+    const response = await csrfFetch("/api/users", {
+      method: "POST",
+      body: JSON.stringify({
+        username,
+        firstName,
+        lastName,
+        email,
+        password,
+      }),
+    });
+    const data = await response.json();
+    dispatch(setSessionUser(data.user));
+    return response;
+  };
 
 
 const initialState = {
