@@ -1,5 +1,6 @@
 /* Navigation.css */
 
+
 /* Styles for the profile button */
 button {
   background: none;
@@ -7,6 +8,7 @@ button {
   cursor: pointer;
   font-size: 18px;
   color: #333; /* Set your desired color */
+  margin-right: 20px
 }
 
 /* Styles for the dropdown menu container */

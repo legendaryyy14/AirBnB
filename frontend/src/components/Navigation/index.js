@@ -10,24 +10,26 @@ function Navigation({ isLoaded }){
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
-      <li>
+      <div className="profile_button">
         <ProfileButton user={sessionUser} />
-      </li>
+      </div>
     );
   } else {
     sessionLinks = (
-      <li>
+      <div className="login_signup">
         <NavLink to="/login">Log In</NavLink>
         <NavLink to="/signup">Sign Up</NavLink>
-      </li>
+      </div>
     );
   }
 
   return (
     <ul>
-      <li>
-        <NavLink exact to="/">Home</NavLink>
-      </li>
+      <div className="airbnb_home">
+        <NavLink exact to="/">
+          <img className='airbnb_icon' src='https://i.pinimg.com/originals/3c/bf/be/3cbfbe148597341fa56f2f87ade90956.png' alt='airbnb_logo'/>
+        </NavLink>
+      </div>
       {isLoaded && sessionLinks}
     </ul>
   );

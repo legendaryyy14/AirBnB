@@ -1,9 +1,15 @@
 const LOAD = "spots/LOAD"
+const ADD_ONE = "spots/ADD_ONE"
 
 const load = list => ({
     type: LOAD,
     list
 });
+
+const addOneSpot = spot => ({
+    type: ADD_ONE,
+    spot
+})
 
 export const fetchSpots = () => async dispatch => {
     const res = await fetch('/api/spots');
@@ -14,6 +20,11 @@ export const fetchSpots = () => async dispatch => {
     }
   };
 
+export const fetchOneSpot = (id) => async dispatch => {
+    const res = await fetch(`/api/spots/${id}`);
+    const spot = await res.json();
+    dispatch(addOneSpot(spot))
+}
 
 
 const initialState = {
@@ -27,6 +38,11 @@ const initialState = {
           ...state,
           list: action.list,
         };
+      case ADD_ONE:
+        return {
+            ...state,
+            list: [...state.list, action.spot]
+        }
       default:
         return state;
     }
