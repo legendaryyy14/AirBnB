@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSpots } from "../../store/spots";
-import { NavLink } from "react-router-dom/cjs/react-router-dom.min";
+import { NavLink } from "react-router-dom";
 
 const HomePage = () => {
   const dispatch = useDispatch();
   const spotsObject = useSelector((state) => state.spots.list);
   const spots = Object.values(spotsObject);
-    console.log(spots)
+
+
   useEffect(() => {
     dispatch(fetchSpots());
   }, [dispatch]);
