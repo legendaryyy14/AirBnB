@@ -21,7 +21,7 @@ const HomePage = () => {
     <div className="home-page">
       <h1>Spots</h1>
       <div className="spot-tile-list">
-        {spots[0].map((spot) => (
+        {spots[0]?.map((spot) => (
           <NavLink key={spot.id} to={`/spots/${spot.id}`}>
             <img className="previmg" src={`${spot.previewImage}`} alt='prev_img' title={`${spot.name}`}/>
             <p>{spot.city}, {spot.state}</p>

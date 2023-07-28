@@ -54,7 +54,7 @@ const initialState = {
           list: action.list,
         };
       case ADD_ONE:
-        if (!state[action.spot.id]) {
+
           const newState = {
             ...state,
             [action.spot.id]: action.spot
@@ -63,9 +63,9 @@ const initialState = {
           spotList.push(action.spot);
           newState.list = spotList;
           return newState;
-        };
-        case LOAD_REVIEWS:
-          return {
+
+          case LOAD_REVIEWS:
+            return {
             ...state,
             reviews: action.reviews
           };
