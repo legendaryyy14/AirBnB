@@ -1,5 +1,6 @@
 const LOAD = "spots/LOAD"
 const GET_ONE = "spots/GET_ONE"
+const ADD_ONE = "spots/ADD_ONE"
 const LOAD_REVIEWS = "spots/LOAD_REVIEWS"
 
 const load = list => ({
@@ -11,6 +12,11 @@ const getOneSpot = spot => ({
     type: GET_ONE,
     spot
 });
+
+const addSpot = spot => ({
+  type: ADD_ONE,
+  spot
+})
 
 const loadReviews = reviews => ({
   type: LOAD_REVIEWS,
@@ -30,6 +36,20 @@ export const fetchOneSpot = (id) => async dispatch => {
     const res = await fetch(`/api/spots/${id}`);
     const spot = await res.json();
     dispatch(getOneSpot(spot))
+};
+
+export const createSpot = payload => async (dispatch) => {
+  const res = await fetch('/api/spots',{
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+
+  if (res.ok) {
+    const createdSpot = await res.json();
+    dispatch(addSpot(createdSpot))
+    return createSpot
+  }
 }
 
 export const getReviews = (id) => async dispatch => {
@@ -73,7 +93,16 @@ const initialState = {
           newState.list.Spots = updatedSpots
           return newState;
 
-          case LOAD_REVIEWS:
+      case ADD_ONE:
+          return {
+            ...state,
+            list: {
+              ...state.list,
+              Spots: [...state.list.Spots, action.spot]
+            }
+          }
+
+      case LOAD_REVIEWS:
 
             return {
 
