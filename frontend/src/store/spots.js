@@ -1,5 +1,5 @@
 const LOAD = "spots/LOAD"
-const ADD_ONE = "spots/ADD_ONE"
+const GET_ONE = "spots/GET_ONE"
 const LOAD_REVIEWS = "spots/LOAD_REVIEWS"
 
 const load = list => ({
@@ -7,8 +7,8 @@ const load = list => ({
     list
 });
 
-const addOneSpot = spot => ({
-    type: ADD_ONE,
+const getOneSpot = spot => ({
+    type: GET_ONE,
     spot
 });
 
@@ -29,7 +29,7 @@ export const fetchSpots = () => async dispatch => {
 export const fetchOneSpot = (id) => async dispatch => {
     const res = await fetch(`/api/spots/${id}`);
     const spot = await res.json();
-    dispatch(addOneSpot(spot))
+    dispatch(getOneSpot(spot))
 }
 
 export const getReviews = (id) => async dispatch => {
@@ -53,21 +53,32 @@ const initialState = {
           ...state,
           list: action.list,
         };
-      case ADD_ONE:
-
+      case GET_ONE:
           const newState = {
             ...state,
-            [action.spot.id]: action.spot
           };
-          const spotList = newState.list.map(id => newState[id]);
-          spotList.push(action.spot);
-          newState.list = spotList;
+          let spots = newState.list.Spots;
+          const updatedSpots = spots.map(spot => {
+            if (spot.id === action.spot.id) {
+              return action.spot
+            } else {
+              return spot
+            }
+          });
+          console.log(updatedSpots)
+          // const spotList = newState.list.Spots.map(id => newState[id]);
+          // spotList.push(action.spot);
+          // console.log(spotList)
+          // newState.list = spotList;
+          newState.list.Spots = updatedSpots
           return newState;
 
           case LOAD_REVIEWS:
+
             return {
+
             ...state,
-            reviews: action.reviews
+            reviews: action.reviews.Reviews
           };
       default:
         return state;

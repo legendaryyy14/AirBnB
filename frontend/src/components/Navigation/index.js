@@ -1,35 +1,41 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import ProfileButton from './ProfileButton';
+import * as sessionActions from '../../store/session';
 import './Navigation.css';
 
 function Navigation({ isLoaded }){
   const sessionUser = useSelector(state => state.session.user);
+  const dispatch = useDispatch();
+
+  const logout = (e) => {
+    e.preventDefault();
+    dispatch(sessionActions.logout());
+  };
 
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
-      <div className="profile_button">
+      <li>
         <ProfileButton user={sessionUser} />
-      </div>
+        <button onClick={logout}>Log Out</button>
+      </li>
     );
   } else {
     sessionLinks = (
-      <div className="login_signup">
+      <li>
         <NavLink to="/login">Log In</NavLink>
         <NavLink to="/signup">Sign Up</NavLink>
-      </div>
+      </li>
     );
   }
 
   return (
     <ul>
-      <div className="airbnb_home">
-        <NavLink exact to="/">
-          <img className='airbnb_icon' src='https://i.pinimg.com/originals/3c/bf/be/3cbfbe148597341fa56f2f87ade90956.png' alt='airbnb_logo'/>
-        </NavLink>
-      </div>
+      <li>
+        <NavLink exact to="/">Home</NavLink>
+      </li>
       {isLoaded && sessionLinks}
     </ul>
   );
