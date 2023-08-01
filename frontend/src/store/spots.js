@@ -2,6 +2,7 @@ const LOAD = "spots/LOAD"
 const GET_ONE = "spots/GET_ONE"
 const ADD_ONE = "spots/ADD_ONE"
 const LOAD_REVIEWS = "spots/LOAD_REVIEWS"
+const ADD_IMAGE = "spots/ADD_IMAGE"
 
 const load = list => ({
     type: LOAD,
@@ -21,7 +22,12 @@ const addSpot = spot => ({
 const loadReviews = reviews => ({
   type: LOAD_REVIEWS,
   reviews
-});
+})
+
+const addSpotImage = image => ({
+  type: ADD_IMAGE,
+  image
+})
 
 export const fetchSpots = () => async dispatch => {
     const res = await fetch('/api/spots');
@@ -48,7 +54,7 @@ export const createSpot = payload => async (dispatch) => {
   if (res.ok) {
     const createdSpot = await res.json();
     dispatch(addSpot(createdSpot))
-    return createSpot
+    return createdSpot
   }
 }
 
@@ -59,6 +65,23 @@ export const getReviews = (id) => async dispatch => {
     const reviews = await res.json();
     dispatch(loadReviews(reviews))
   }
+}
+
+export const createSpotImage = (spotId, payload) => async dispatch => {
+  const res = await fetch(`/api/spots/${spotId}/images`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if(res.ok) {
+    const createdImage = await res.json();
+    dispatch(addSpotImage(createdImage))
+    return createdImage
+  }
+
 }
 
 const initialState = {
