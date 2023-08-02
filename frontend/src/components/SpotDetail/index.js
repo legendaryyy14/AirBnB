@@ -2,21 +2,23 @@ import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect } from "react";
 import { fetchOneSpot, getReviews } from "../../store/spots";
-import * as sessionActions from "../../store/session";
 
 const SpotDetail = () => {
-  const sessionUser = useSelector((state) => state.session.user);
   const dispatch = useDispatch();
+  const sessionUser = useSelector((state) => state.session.user);
   const { spotId } = useParams();
+
+  const spot = useSelector((state) => state.spots[spotId])
+  const reviewsObject = useSelector((state) => state.spots);
+  const reviews = reviewsObject.reviews ? reviewsObject.reviews : []
 
   useEffect(() => {
     dispatch(fetchOneSpot(spotId));
     dispatch(getReviews(spotId));
   }, [dispatch, spotId]);
 
-  const spots = useSelector((state) => state.spots.list.Spots);
-  const reviews = useSelector((state) => state.spots.reviews);
-  const spot = spots.find((spot) => spot.id === Number(spotId));
+
+  if (!spot && !reviews) return null
 
   console.log("CONSOLE LOG ===>", reviews);
 
@@ -37,7 +39,8 @@ const SpotDetail = () => {
         <p>{spot?.price} night</p>
         <i className="fa-solid fa-star"></i>
         <p>{spot?.avgRating}</p>
-        {reviews.length > 0 && (
+
+        {reviews && reviews.length > 0 && (
           <>
             <p className="dot">·</p>
             <p>

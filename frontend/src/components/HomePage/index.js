@@ -5,14 +5,15 @@ import { NavLink } from "react-router-dom";
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const spotsObject = useSelector((state) => state.spots.list);
-  const spots = Object.values(spotsObject);
 
 
   useEffect(() => {
     dispatch(fetchSpots());
   }, [dispatch]);
 
+  const spotsObject = useSelector((state) => state.spots);
+  const spots = Object.values(spotsObject);
+  console.log(spots)
 
   const getRatingOrNew = (avgRating) => {
     return avgRating ? avgRating : "New";
@@ -21,7 +22,7 @@ const HomePage = () => {
     <div className="home-page">
       <h1>Spots</h1>
       <div className="spot-tile-list">
-        {spots[0]?.map((spot) => (
+        {spots.map((spot) => (
           <NavLink key={spot.id} to={`/spots/${spot.id}`}>
             <img className="previmg" src={`${spot.previewImage}`} alt='prev_img' title={`${spot.name}`}/>
             <p>{spot.city}, {spot.state}</p>
