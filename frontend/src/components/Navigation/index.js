@@ -17,27 +17,31 @@ function Navigation({ isLoaded }){
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
-      <li>
+      <div>
         <ProfileButton user={sessionUser} />
-        <button onClick={logout}>Log Out</button>
-      </li>
+      </div>
     );
   } else {
     sessionLinks = (
-      <li>
+      <div>
         <NavLink to="/login">Log In</NavLink>
         <NavLink to="/signup">Sign Up</NavLink>
-      </li>
+      </div>
     );
   }
 
   return (
-    <ul>
-      <li>
-        <NavLink exact to="/">Home</NavLink>
-      </li>
+    <div>
+
+      <div className='left-side'>
+        <NavLink exact to="/"><i class="fa-brands fa-airbnb"></i> airbnb</NavLink>
+      </div>
+      <NavLink to='/spots'>Create a New Spot</NavLink>
+      <div className='right-side'>
       {isLoaded && sessionLinks}
-    </ul>
+      </div>
+
+    </div>
   );
 }
 

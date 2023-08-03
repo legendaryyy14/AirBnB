@@ -17,8 +17,14 @@ const SpotDetail = () => {
     dispatch(getReviews(spotId));
   }, [dispatch, spotId]);
 
+  const handleReserveClick = () => {
+    alert("Feature coming soon");
+  };
 
-  if (!spot && !reviews) return null
+  const formatMonthAndYear = (dateString) => {
+    const options = { year: 'numeric', month: 'long' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
 
   console.log("CONSOLE LOG ===>", reviews);
 
@@ -39,6 +45,7 @@ const SpotDetail = () => {
         <p>{spot?.price} night</p>
         <i className="fa-solid fa-star"></i>
         <p>{spot?.avgRating}</p>
+        <button onClick={handleReserveClick}>Reserve</button>
 
         {reviews && reviews.length > 0 && (
           <>
@@ -65,14 +72,14 @@ const SpotDetail = () => {
           </>
         )}
         <div>
-          {reviews.length === 0 && sessionUser ? (
+          {reviews.length === 0 && sessionUser && sessionUser !== spot?.Owner ? (
             <p>Be the first to post a review!</p>
           ) : (
             <ul>
               {reviews.map((review) => (
                 <div key={review.id}>
                   <p>{review.User.firstName}</p>
-                  <p>{review.updatedAt}</p>
+                  <p>{formatMonthAndYear(review.updatedAt)}</p>
                   <p>{review.review}</p>
                 </div>
               ))}

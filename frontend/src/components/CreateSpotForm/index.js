@@ -253,7 +253,7 @@ const CreateSpotForm = ({ hideForm }) => {
           <p className="errors">{errors.image}</p>
         </section>
 
-        <button type="submit">Create Spot</button>
+        <button type="submit" disabled={!country || !address || !city || !state || !description || !name || !price || !urls[0] }>Create Spot</button>
 
       </form>
     </div>
