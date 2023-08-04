@@ -14,6 +14,7 @@ function Navigation({ isLoaded }){
     dispatch(sessionActions.logout());
   };
 
+
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
@@ -24,8 +25,7 @@ function Navigation({ isLoaded }){
   } else {
     sessionLinks = (
       <div>
-        <NavLink to="/login">Log In</NavLink>
-        <NavLink to="/signup">Sign Up</NavLink>
+        <ProfileButton user={sessionUser} />
       </div>
     );
   }
@@ -36,7 +36,13 @@ function Navigation({ isLoaded }){
       <div className='left-side'>
         <NavLink exact to="/"><i class="fa-brands fa-airbnb"></i> airbnb</NavLink>
       </div>
-      <NavLink to='/spots'>Create a New Spot</NavLink>
+      {
+       sessionUser ? (
+        <>
+         <NavLink to='/spots'>Create a New Spot</NavLink>
+        </>) : (<></>)
+
+      }
       <div className='right-side'>
       {isLoaded && sessionLinks}
       </div>

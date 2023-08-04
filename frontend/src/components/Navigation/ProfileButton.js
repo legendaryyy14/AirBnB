@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch } from 'react-redux';
 import * as sessionActions from '../../store/session';
-import OpenModalButton from "../OpenModalButton";
 import LoginFormPage from '../LoginFormPage';
 import SignupFormPage from '../SignupFormPage';
+import Modal from 'react-modal'
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -36,6 +36,9 @@ function ProfileButton({ user }) {
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
+  const [ showLoginModal, setShowLoginModal ] = useState(false);
+  const [ showSignUpModal, setShowSignUpModal ] = useState(false);
+
   return (
     <>
       <button onClick={openMenu}>
@@ -53,16 +56,23 @@ function ProfileButton({ user }) {
         ) : (
           <>
             <li>
-              <OpenModalButton
-                buttonText="Log In"
-                modalComponent={<LoginFormPage />}
-              />
+              <button onClick={() => setShowLoginModal(true)} className='loginBtn'>Login</button>
+              <Modal
+                isOpen={showLoginModal}
+                onRequestClose={() => setShowLoginModal(false)}
+              >
+                <LoginFormPage />
+              </Modal>
             </li>
+
             <li>
-              <OpenModalButton
-                buttonText="Sign Up"
-                modalComponent={<SignupFormPage />}
-              />
+              <button onClick={() => setShowSignUpModal(true)}>Sign Up</button>
+              <Modal
+                isOpen={showSignUpModal}
+                onRequestClose={() => setShowSignUpModal(false)}
+              >
+                <SignupFormPage />
+              </Modal>
             </li>
           </>
         )}

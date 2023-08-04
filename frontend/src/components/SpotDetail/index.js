@@ -1,7 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchOneSpot, getReviews } from "../../store/spots";
+import Modal from 'react-modal'
+import ReviewForm from "../ReviewFormModal";
 
 const SpotDetail = () => {
   const dispatch = useDispatch();
@@ -11,6 +13,7 @@ const SpotDetail = () => {
   const spot = useSelector((state) => state.spots[spotId])
   const reviewsObject = useSelector((state) => state.spots);
   const reviews = reviewsObject.reviews ? reviewsObject.reviews : []
+  console.log(reviewsObject)
 
   useEffect(() => {
     dispatch(fetchOneSpot(spotId));
@@ -25,6 +28,8 @@ const SpotDetail = () => {
     const options = { year: 'numeric', month: 'long' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
+
+  const [ showReviewForm, setReviewForm ] = useState(false)
 
   console.log("CONSOLE LOG ===>", reviews);
 
@@ -58,6 +63,7 @@ const SpotDetail = () => {
           </>
         )}
       </div>
+
       <div className="reviews">
         <i className="fa-solid fa-star"></i>
         <p>{spot?.avgRating}</p>
@@ -71,6 +77,15 @@ const SpotDetail = () => {
             </p>
           </>
         )}
+        <div>
+        <button onClick={() => setReviewForm(true)} className="revBtn">Post Your Review</button>
+        <Modal
+          isOpen={showReviewForm}
+          onRequestClose={() => setReviewForm(false)}
+        >
+          <ReviewForm />
+        </Modal>
+        </div>
         <div>
           {reviews.length === 0 && sessionUser && sessionUser !== spot?.Owner ? (
             <p>Be the first to post a review!</p>
