@@ -1,11 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import Modal from 'react-modal';
 import './ReviewForm.css'
+import { getReviews, createReview } from '../../store/spots';
+
 
 const ReviewForm = () => {
+  const dispatch = useDispatch();
+  const sessionUser = useSelector((state) => state.session.user);
+  const { spotId } = useParams();
+
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(0);
+
+  const reviewsObject = useSelector((state) => state.spots);
+  const reviews = reviewsObject.reviews ? reviewsObject.reviews : []
+  console.log(reviews);
+
+  useEffect(() => {
+    dispatch(getReviews(spotId));
+  }, [dispatch, spotId]);
 
   const handleCommentChange = (event) => {
     setComment(event.target.value);
@@ -18,7 +34,15 @@ const ReviewForm = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (comment.length >= 10 && rating > 0) {
-      // Process the review submission
+
+      const payload = {
+        userId: sessionUser.id,
+        spotId,
+        review: comment,
+        stars: rating
+      }
+
+      let createdReview = dispatch(createReview(spotId, payload))
       console.log('Review submitted:', { comment, rating });
       // Close the modal
       setModalIsOpen(false);

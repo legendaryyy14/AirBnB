@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { fetchSpots, createSpot, createSpotImage } from "../../store/spots";
 
-const CreateSpotForm = ({ hideForm }) => {
+const CreateSpotForm = () => {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
   const history = useHistory();
@@ -25,7 +25,11 @@ const CreateSpotForm = ({ hideForm }) => {
   const updateName = (e) => setName(e.target.value);
   const updateDescription = (e) => setDescription(e.target.value);
   const updatePrice = (e) => setPrice(e.target.value);
-  const updateUrls = (e) => setUrls([...urls, e.target.value]);
+  const updateUrls = (e) => {
+    const newValue = e.target.value;
+    setUrls([...urls, newValue]);
+  };
+
 
   useEffect(() => {
     dispatch(fetchSpots());
@@ -42,6 +46,7 @@ const CreateSpotForm = ({ hideForm }) => {
 
     setErrors(errors);
   }, [dispatch, address, city, state, country, name, description, price, urls]);
+  console.log(urls)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,9 +61,12 @@ const CreateSpotForm = ({ hideForm }) => {
       name,
       description,
       price,
+      lat: 12.292,
+      lng: 45.374
     };
 
     let createdSpot = await dispatch(createSpot(payload));
+
 
     if (createdSpot && createdSpot.id) {
         const validUrls = urls.filter(url => isValidImageUrl(url));
@@ -72,10 +80,10 @@ const CreateSpotForm = ({ hideForm }) => {
         const imagesPayload = {
           url,
           preview: index === 0, // Set preview to true for the first image, false for others
-          spotId: createdSpot.id,
+          spotId: Number(createdSpot.id),
         };
 
-        return await dispatch(createSpotImage(imagesPayload));
+        return await dispatch(createSpotImage(createdSpot.id, imagesPayload));
       });
 
       // Wait for all spot image creation promises to resolve
@@ -83,7 +91,6 @@ const CreateSpotForm = ({ hideForm }) => {
 
       if (createdImages.every((image) => !!image)) {
         history.push(`/spots/${createdSpot.id}`);
-        hideForm();
       }
     }
   };
@@ -203,52 +210,35 @@ const CreateSpotForm = ({ hideForm }) => {
             type="text"
             placeholder="Preview Image URL"
             value={urls[0] || ""}
-            onChange={(e) => {
-              // We set the first URL as the preview URL
-              updateUrls([e.target.value, ...urls.slice(1)]);
-            }}
+            onChange={updateUrls}
           />
           <p className="errors">{errors.urls}</p>
           <input
             type="text"
             placeholder="Image URL"
             value={urls[1] || ""}
-            onChange={(e) =>
-              updateUrls([urls[0], e.target.value, ...urls.slice(2)])
-            }
+            onChange={updateUrls}
           />
           <p className="errors">{errors.image}</p>
           <input
             type="text"
             placeholder="Image URL"
             value={urls[2] || ""}
-            onChange={(e) =>
-              updateUrls([urls[0], urls[1], e.target.value, ...urls.slice(3)])
-            }
+            onChange={updateUrls}
           />
           <p className="errors">{errors.image}</p>
           <input
             type="text"
             placeholder="Image URL"
             value={urls[3] || ""}
-            onChange={(e) =>
-              updateUrls([
-                urls[0],
-                urls[1],
-                urls[2],
-                e.target.value,
-                ...urls.slice(4),
-              ])
-            }
+            onChange={updateUrls}
           />
           <p className="errors">{errors.image}</p>
           <input
             type="text"
             placeholder="Image URL"
             value={urls[4] || ""}
-            onChange={(e) =>
-              updateUrls([urls[0], urls[1], urls[2], urls[3], e.target.value])
-            }
+            onChange={updateUrls}
           />
           <p className="errors">{errors.image}</p>
         </section>
