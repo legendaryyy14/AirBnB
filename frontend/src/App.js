@@ -9,6 +9,7 @@ import HomePage from "./components/HomePage";
 import SpotDetail from "./components/SpotDetail"
 import CreateSpotForm from "./components/CreateSpotForm";
 import ManageSpots from "./components/ManageSpots"
+import UpdateSpotForm from "./components/UpdateSpotForm";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,11 +29,14 @@ function App() {
           <Route path="/signup">
             <SignupFormPage />
           </Route>
-          <Route path="/spots/:spotId">
-            <SpotDetail />
-          </Route>
           <Route path="/spots/current">
             <ManageSpots />
+          </Route>
+          <Route path="/spots/:spotId/update">
+            <UpdateSpotForm />
+          </Route>
+          <Route path="/spots/:spotId">
+            <SpotDetail />
           </Route>
           <Route path="/spots">
             <CreateSpotForm />

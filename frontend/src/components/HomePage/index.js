@@ -13,7 +13,6 @@ const HomePage = () => {
 
   const spotsObject = useSelector((state) => state.spots);
   const spots = Object.values(spotsObject);
-  console.log(spots)
 
   const getRatingOrNew = (avgRating) => {
     return avgRating ? avgRating : "New";

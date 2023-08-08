@@ -24,14 +24,19 @@ const SpotDetail = () => {
     alert("Feature coming soon");
   };
 
+
+
   const formatMonthAndYear = (dateString) => {
     const options = { year: "numeric", month: "long" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
   const [showReviewForm, setReviewForm] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   console.log("CONSOLE LOG ===>", reviews);
+
+
 
   return (
     <div>
@@ -42,7 +47,7 @@ const SpotDetail = () => {
       <img className="spotImg" src={`${spot?.previewImage}`} alt="spot_img" />
       <div>
         <h2>
-          Hosted by {spot?.Owner.firstName} {spot?.Owner.lastName}
+          Hosted by {spot?.Owner?.firstName} {spot?.Owner?.lastName}
         </h2>
         <p>{spot?.description}</p>
       </div>
@@ -83,7 +88,7 @@ const SpotDetail = () => {
             className="revBtn"
             style={{
               display:
-                sessionUser && sessionUser.id !== spot?.Owner.id
+                sessionUser && sessionUser.id !== spot?.Owner?.id
                   ? "block"
                   : "none",
             }}

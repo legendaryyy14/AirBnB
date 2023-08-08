@@ -1,21 +1,17 @@
 import { csrfFetch } from "./csrf";
 const LOAD = "spots/LOAD"
-const GET_USER_SPOTS = "spots/GET_USER_SPOTS"
 const GET_ONE = "spots/GET_ONE"
 const ADD_ONE = "spots/ADD_ONE"
 const LOAD_REVIEWS = "spots/LOAD_REVIEWS"
 const ADD_IMAGE = "spots/ADD_IMAGE"
 const ADD_REVIEW = "spots/ADD_REVIEW"
+const UPDATE_SPOT = "spots/UPDATE_SPOT"
 
 const load = allSpots => ({
     type: LOAD,
     payload: allSpots
 });
 
-const getUserSpots = userSpots => ({
-  type: GET_USER_SPOTS,
-  payload: userSpots
-})
 
 const getOneSpot = spot => ({
     type: GET_ONE,
@@ -40,6 +36,11 @@ const addSpotImage = image => ({
 const addReview = review => ({
   type: ADD_REVIEW,
   review
+})
+
+const updateSpot = spot => ({
+  type: UPDATE_SPOT,
+  spot
 })
 
 export const fetchSpots = () => async dispatch => {
@@ -125,6 +126,22 @@ export const createReview = (spotId, payload) => async dispatch => {
   }
 }
 
+export const editSpot = (payload) => async dispatch => {
+  const res = await fetch(`/spots/${payload.id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (res.ok) {
+    const updatedSpot = await res.json();
+    dispatch(updateSpot(updatedSpot));
+    return updatedSpot
+  }
+}
+
 const initialState = {};
 
   const spotsReducer = (state = initialState, action) => {
@@ -132,13 +149,6 @@ const initialState = {};
 
     switch (action.type) {
       case LOAD:
-        newState = {}
-        action.payload.Spots.forEach(spot => {
-          newState[spot.id] = spot
-        });
-        return newState;
-
-      case GET_USER_SPOTS:
         newState = {}
         action.payload.Spots.forEach(spot => {
           newState[spot.id] = spot
@@ -162,12 +172,23 @@ const initialState = {};
           };
 
       case ADD_IMAGE:
-        newState[action.spot.id] = action.spot
+        newState[action.image.spotId].image = {
+          ...action.image,
+
+        }
         return newState;
 
       case ADD_REVIEW:
         newState[action.spot.id] = action.spot
         return newState;
+
+      case UPDATE_SPOT:
+        newState[action.spot.id] = {
+          ...newState[action.spot.id], // Copy existing spot data
+          ...action.spot, // Update with new spot data
+        };
+        return newState;
+
 
       default:
         return state;
