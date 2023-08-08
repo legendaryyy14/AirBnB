@@ -24,8 +24,13 @@ function LoginFormPage() {
     );
   };
 
+  const handleDemoLogin = () => {
+    setCredential("demo@user.io");
+    setPassword("password");
+  };
+
   return (
-    <>
+    <div>
       <h1>Log In</h1>
       <form onSubmit={handleSubmit}>
         <label>
@@ -47,9 +52,10 @@ function LoginFormPage() {
           />
         </label>
         {errors.credential && <p>{errors.credential}</p>}
-        <button type="submit">Log In</button>
+        <button type="submit" disabled={ credential.length < 4 || password.length < 6}>Log In</button>
+        <button type="button" onClick={handleDemoLogin}>Demo User</button>
       </form>
-    </>
+    </div>
   );
 }
 

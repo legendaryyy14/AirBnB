@@ -14,30 +14,40 @@ function Navigation({ isLoaded }){
     dispatch(sessionActions.logout());
   };
 
+
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
-      <li>
+      <div>
         <ProfileButton user={sessionUser} />
-        <button onClick={logout}>Log Out</button>
-      </li>
+      </div>
     );
   } else {
     sessionLinks = (
-      <li>
-        <NavLink to="/login">Log In</NavLink>
-        <NavLink to="/signup">Sign Up</NavLink>
-      </li>
+      <div>
+        <ProfileButton user={sessionUser} />
+      </div>
     );
   }
 
   return (
-    <ul>
-      <li>
-        <NavLink exact to="/">Home</NavLink>
-      </li>
+    <div>
+
+      <div className='left-side'>
+        <NavLink exact to="/"><i class="fa-brands fa-airbnb"></i> airbnb</NavLink>
+      </div>
+      {
+       sessionUser ? (
+        <>
+         <NavLink to='/spots'>Create a New Spot</NavLink>
+        </>) : (<></>)
+
+      }
+      <div className='right-side'>
       {isLoaded && sessionLinks}
-    </ul>
+      </div>
+
+    </div>
   );
 }
 

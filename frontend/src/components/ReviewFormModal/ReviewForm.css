@@ -1,0 +1,15 @@
+.star-rating {
+    font-size: 24px; /* Adjust the size as needed */
+    color: #ccc; /* Default color for empty stars */
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .star {
+    display: inline-block;
+    transition: color 0.2s;
+  }
+
+  .filled {
+    color: #ff9800; /* Color for filled stars */
+  }
