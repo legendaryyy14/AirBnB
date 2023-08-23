@@ -1,7 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserSpots } from "../../store/spots"
+import { fetchUserSpots, removeSpot } from "../../store/spots"
 import { useEffect, useState } from "react";
 import { NavLink, useHistory } from "react-router-dom";
+import Modal from "react-modal";
+import "./ManageSpots.css"
 
 
 
@@ -16,9 +18,9 @@ const ManageSpots = () => {
 
     useEffect(() => {
         dispatch(fetchUserSpots())
+        dispatch(removeSpot())
     }, [dispatch])
 
-    console.log(spots)
     const getRatingOrNew = (avgRating) => {
         return avgRating ? avgRating : "New";
     };
@@ -26,6 +28,24 @@ const ManageSpots = () => {
     const handleUpdateClick = (spotId) => {
         history.push(`/spots/${spotId}/update`);
     };
+
+    const [selectedSpotId, setSelectedSpotId] = useState(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+    const handleDeleteClick = (spotId) => {
+        setSelectedSpotId(spotId);
+        setShowDeleteModal(true);
+      };
+
+      const handleConfirmDelete = () => {
+        dispatch(removeSpot(selectedSpotId));
+        setShowDeleteModal(false);
+      };
+
+      const handleCancelDelete = () => {
+        setSelectedSpotId(null);
+        setShowDeleteModal(false);
+      };
 
     return (
         <div>
@@ -44,11 +64,32 @@ const ManageSpots = () => {
                             </NavLink>
 
                                 <button onClick={() => handleUpdateClick(spot.id)}>Update</button>
-                                <button>Delete</button>
+                                <button onClick={() => handleDeleteClick(spot.id)}>Delete</button>
                         </div>
                     ))
                 )}
             </div>
+            <Modal
+        isOpen={showDeleteModal}
+        onRequestClose={handleCancelDelete}
+        className="modal"
+        overlayClassName="overlay"
+      >
+        <div className="modal-content">
+          <h2 className="modal-title">Confirm Delete</h2>
+          <p className="modal-message">Are you sure you want to remove this spot?</p>
+          <div className="modal-buttons">
+            <button className="modal-button delete-button" onClick={handleConfirmDelete}>
+              Yes (Delete Spot)
+            </button>
+            <button className="modal-button cancel-button" onClick={handleCancelDelete}>
+              No (Keep Spot)
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+
         </div>
     );
 }

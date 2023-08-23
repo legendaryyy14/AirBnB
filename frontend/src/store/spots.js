@@ -6,6 +6,7 @@ const LOAD_REVIEWS = "spots/LOAD_REVIEWS"
 const ADD_IMAGE = "spots/ADD_IMAGE"
 const ADD_REVIEW = "spots/ADD_REVIEW"
 const UPDATE_SPOT = "spots/UPDATE_SPOT"
+const DELETE_SPOT = "spots/DELETE_SPOT"
 
 const load = allSpots => ({
     type: LOAD,
@@ -41,6 +42,11 @@ const addReview = review => ({
 const updateSpot = spot => ({
   type: UPDATE_SPOT,
   spot
+})
+
+const deleteSpot = spotId => ({
+  type: DELETE_SPOT,
+  spotId
 })
 
 export const fetchSpots = () => async dispatch => {
@@ -142,6 +148,17 @@ export const editSpot = (payload) => async dispatch => {
   }
 }
 
+export const removeSpot = (spotId) => async (dispatch) => {
+  const res = await csrfFetch(`/spots/${spotId}`, {
+    method: "DELETE",
+  });
+
+  if (res.ok) {
+    dispatch(deleteSpot(spotId));
+  }
+};
+
+
 const initialState = {};
 
   const spotsReducer = (state = initialState, action) => {
@@ -184,11 +201,14 @@ const initialState = {};
 
       case UPDATE_SPOT:
         newState[action.spot.id] = {
-          ...newState[action.spot.id], // Copy existing spot data
-          ...action.spot, // Update with new spot data
+          ...newState[action.spot.id],
+          ...action.spot,
         };
         return newState;
 
+      case DELETE_SPOT:
+        const { [action.spotId]: _, ...rest } = newState;
+        return rest;
 
       default:
         return state;

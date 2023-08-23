@@ -65,6 +65,8 @@ const CreateSpotForm = () => {
       lng: 45.374
     };
 
+
+
     let createdSpot = await dispatch(createSpot(payload));
 
 

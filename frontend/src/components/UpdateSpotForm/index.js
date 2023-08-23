@@ -9,7 +9,6 @@ const UpdateSpotForm = () => {
   const {spotId } = useParams();
   const spot = useSelector((state) => state.spots[spotId]);
   const history = useHistory();
-  console.log("CONSOLE LOG ===>", spot);
 
 
   const [address, setAddress] = useState(spot?.address);
@@ -56,6 +55,7 @@ const UpdateSpotForm = () => {
     setErrors({});
 
     const payload = {
+      id: spotId,
       ownerId: sessionUser.id,
       address,
       city,
@@ -70,11 +70,12 @@ const UpdateSpotForm = () => {
 
     let updatedSpot = await dispatch(editSpot(payload));
 
+    // console.log("CONSOLE LOG ===>", spotImagesPromises);
 
     if (updatedSpot && updatedSpot.id) {
-        const validUrls = urls.filter(url => isValidImageUrl(url));
+      const validUrls = urls.filter(url => isValidImageUrl(url));
 
-        if (validUrls.length === 0) {
+      if (validUrls.length === 0) {
             setErrors({image: "Image URL must end in .png, .jpg, or .jpeg"});
             return
         }
