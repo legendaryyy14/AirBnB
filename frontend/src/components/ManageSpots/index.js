@@ -14,7 +14,6 @@ const ManageSpots = () => {
 
   useEffect(() => {
     dispatch(fetchUserSpots());
-    dispatch(removeSpot());
   }, [dispatch]);
 
   const getRatingOrNew = (avgRating) => {

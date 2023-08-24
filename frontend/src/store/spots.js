@@ -139,7 +139,7 @@ export const createReview = (payload) => async dispatch => {
 }
 
 export const editSpot = (payload) => async dispatch => {
-  const res = await fetch(`/spots/${payload.id}`, {
+  const res = await fetch(`/api/spots/${payload.id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"
@@ -155,7 +155,7 @@ export const editSpot = (payload) => async dispatch => {
 }
 
 export const removeSpot = (spotId) => async (dispatch) => {
-  const res = await csrfFetch(`/spots/${spotId}`, {
+  const res = await csrfFetch(`/api/spots/${spotId}`, {
     method: "DELETE",
   });
 
@@ -165,7 +165,7 @@ export const removeSpot = (spotId) => async (dispatch) => {
 };
 
 export const removeReview = reviewId => async (dispatch) => {
-  const res = await csrfFetch(`/reviews/${reviewId}`, {
+  const res = await csrfFetch(`/api/reviews/${reviewId}`, {
     method: 'DELETE'
   });
 
@@ -221,8 +221,12 @@ const initialState = {};
         return newState;
 
       case DELETE_SPOT:
-        const { [action.spotId]: _, ...rest } = newState;
-        return rest;
+        // const { [action.spotId]: _, ...rest } = newState;
+        // return rest;
+        console.log(newState)
+        newState = {...state};
+        delete newState[action.spotId];
+        return newState
 
       case DELETE_REVIEW:
         if (newState.reviews) {
