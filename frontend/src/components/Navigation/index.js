@@ -1,18 +1,18 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
-import * as sessionActions from '../../store/session';
+// import * as sessionActions from '../../store/session';
 import './Navigation.css';
 
 function Navigation({ isLoaded }){
   const sessionUser = useSelector(state => state.session.user);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const logout = (e) => {
-    e.preventDefault();
-    dispatch(sessionActions.logout());
-  };
+  // const logout = (e) => {
+  //   e.preventDefault();
+  //   dispatch(sessionActions.logout());
+  // };
 
 
   let sessionLinks;
@@ -34,7 +34,7 @@ function Navigation({ isLoaded }){
     <div>
 
       <div className='left-side'>
-        <NavLink exact to="/"><i class="fa-brands fa-airbnb"></i> airbnb</NavLink>
+        <NavLink exact to="/"><i className="fa-brands fa-airbnb"></i> airbnb</NavLink>
       </div>
       {
        sessionUser ? (

@@ -7,6 +7,7 @@ const ADD_IMAGE = "spots/ADD_IMAGE"
 const ADD_REVIEW = "spots/ADD_REVIEW"
 const UPDATE_SPOT = "spots/UPDATE_SPOT"
 const DELETE_SPOT = "spots/DELETE_SPOT"
+const DELETE_REVIEW = "spots/DELETE_REVIEW"
 
 const load = allSpots => ({
     type: LOAD,
@@ -47,6 +48,11 @@ const updateSpot = spot => ({
 const deleteSpot = spotId => ({
   type: DELETE_SPOT,
   spotId
+})
+
+const deleteReview = reviewId => ({
+  type: DELETE_REVIEW,
+  reviewId
 })
 
 export const fetchSpots = () => async dispatch => {
@@ -116,8 +122,8 @@ export const createSpotImage = (spotId, payload) => async dispatch => {
 
 };
 
-export const createReview = (spotId, payload) => async dispatch => {
-  const res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+export const createReview = (payload) => async dispatch => {
+  const res = await csrfFetch(`/api/spots/${payload.spotId}/reviews`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -127,8 +133,8 @@ export const createReview = (spotId, payload) => async dispatch => {
 
   if (res.ok) {
     const createdReview = await res.json();
-    dispatch(addReview(createReview));
-    return createReview;
+    dispatch(addReview(createdReview));
+    return createdReview;
   }
 }
 
@@ -157,6 +163,14 @@ export const removeSpot = (spotId) => async (dispatch) => {
     dispatch(deleteSpot(spotId));
   }
 };
+
+export const removeReview = reviewId => async (dispatch) => {
+  const res = await csrfFetch(`/reviews/${reviewId}`, {
+    method: 'DELETE'
+  });
+
+  if (res.ok) dispatch(deleteReview(reviewId))
+}
 
 
 const initialState = {};
@@ -209,6 +223,15 @@ const initialState = {};
       case DELETE_SPOT:
         const { [action.spotId]: _, ...rest } = newState;
         return rest;
+
+      case DELETE_REVIEW:
+        if (newState.reviews) {
+          console.log(newState)
+          newState.reviews = newState.reviews.filter(
+            (review) => review.id !== action.reviewId
+          );
+        }
+        return newState
 
       default:
         return state;

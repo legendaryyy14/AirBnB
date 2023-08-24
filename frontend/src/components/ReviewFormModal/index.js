@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import Modal from 'react-modal';
 import './ReviewForm.css'
 import { getReviews, createReview } from '../../store/spots';
 
@@ -42,7 +41,7 @@ const ReviewForm = () => {
         stars: rating
       }
 
-      let createdReview = dispatch(createReview(spotId, payload))
+      let createdReview = dispatch(createReview(payload))
       console.log('Review submitted:', { comment, rating });
       // Close the modal
       setModalIsOpen(false);

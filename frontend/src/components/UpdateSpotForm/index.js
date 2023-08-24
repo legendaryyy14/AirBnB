@@ -10,6 +10,7 @@ const UpdateSpotForm = () => {
   const spot = useSelector((state) => state.spots[spotId]);
   const history = useHistory();
 
+  console.log(spot) // cant get access to spot urls
 
   const [address, setAddress] = useState(spot?.address);
   const [city, setCity] = useState(spot?.city);
@@ -18,7 +19,7 @@ const UpdateSpotForm = () => {
   const [name, setName] = useState(spot?.name);
   const [description, setDescription] = useState(spot?.description);
   const [price, setPrice] = useState(spot?.price);
-  const [urls, setUrls] = useState(["something"]);
+  const [urls, setUrls] = useState([]);
   const [errors, setErrors] = useState({});
 
   const updateAddress = (e) => setAddress(e.target.value);
@@ -33,7 +34,7 @@ const UpdateSpotForm = () => {
     setUrls([...urls, newValue]);
   };
 
-
+console.log(urls)
   useEffect(() => {
     dispatch(fetchUserSpots());
     const errors = {};

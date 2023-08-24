@@ -17,6 +17,7 @@ const HomePage = () => {
   const getRatingOrNew = (avgRating) => {
     return avgRating ? avgRating : "New";
   };
+
   return (
     <div className="home-page">
       <h1>Spots</h1>

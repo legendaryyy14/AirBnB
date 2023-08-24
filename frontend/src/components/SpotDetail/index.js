@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect, useState } from "react";
-import { fetchOneSpot, getReviews } from "../../store/spots";
+import { fetchOneSpot, getReviews, removeReview } from "../../store/spots";
 import Modal from "react-modal";
 import ReviewForm from "../ReviewFormModal";
 
@@ -32,7 +32,24 @@ const SpotDetail = () => {
   };
 
   const [showReviewForm, setReviewForm] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false);
+
+  const [reviewToDelete, setReviewToDelete] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const handleDeleteReview = (reviewId) => {
+    setReviewToDelete(reviewId);
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (reviewToDelete) {
+      console.log(reviews)
+      await dispatch(removeReview(reviewToDelete));
+      setShowDeleteModal(false);
+      setReviewToDelete(null);
+      dispatch(getReviews(spotId));
+    }
+  };
 
   console.log("CONSOLE LOG ===>", reviews);
 
@@ -109,7 +126,7 @@ const SpotDetail = () => {
           sessionUser !== spot?.Owner ? (
             <p>Be the first to post a review!</p>
           ) : (
-            <ul>
+            <div>
               {reviews
                 .slice()
                 .reverse()
@@ -118,11 +135,29 @@ const SpotDetail = () => {
                     <p>{review.User.firstName}</p>
                     <p>{formatMonthAndYear(review.updatedAt)}</p>
                     <p>{review.review}</p>
+                    {sessionUser && sessionUser.id === review.User.id && (
+                    <button onClick={() => handleDeleteReview(review.id)}>Delete</button>
+                  )}
                   </div>
                 ))}
-            </ul>
+            </div>
+
           )}
         </div>
+        <Modal
+        isOpen={showDeleteModal}
+        onRequestClose={() => setShowDeleteModal(false)}
+        contentLabel="Confirm Delete"
+      >
+        <h2>Confirm Delete</h2>
+        <p>Are you sure you want to delete this review?</p>
+        <button onClick={handleConfirmDelete} className="delete-button">
+          Yes (Delete Review)
+        </button>
+        <button onClick={() => setShowDeleteModal(false)} className="cancel-button">
+          No (Keep Review)
+        </button>
+      </Modal>
       </div>
     </div>
   );
