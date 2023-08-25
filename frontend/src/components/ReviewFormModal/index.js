@@ -15,7 +15,9 @@ const ReviewForm = () => {
   const [rating, setRating] = useState(0);
 
   const reviewsObject = useSelector((state) => state.spots);
-  const reviews = reviewsObject.reviews ? reviewsObject.reviews : []
+  // const reviews = reviewsObject.reviews ? reviewsObject.reviews : []
+  const reviews = useSelector((state) => state.spots.reviews ? state.spots.reviews : []);
+
   console.log(reviews);
 
   useEffect(() => {
@@ -30,21 +32,20 @@ const ReviewForm = () => {
     setRating(Number(event.target.value));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (comment.length >= 10 && rating > 0) {
 
       const payload = {
-        userId: sessionUser.id,
+        userId: sessionUser?.id,
         spotId,
         review: comment,
         stars: rating
       }
 
-      let createdReview = dispatch(createReview(payload))
-      console.log('Review submitted:', { comment, rating });
-      // Close the modal
+      await dispatch(createReview(payload))
       setModalIsOpen(false);
+      console.log('Review submitted:', { comment, rating });
     }
   };
 

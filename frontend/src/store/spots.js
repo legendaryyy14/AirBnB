@@ -37,7 +37,7 @@ const addSpotImage = image => ({
 
 const addReview = review => ({
   type: ADD_REVIEW,
-  review
+  payload: review
 })
 
 const updateSpot = spot => ({
@@ -169,7 +169,9 @@ export const removeReview = reviewId => async (dispatch) => {
     method: 'DELETE'
   });
 
-  if (res.ok) dispatch(deleteReview(reviewId))
+  if (res.ok) {
+    dispatch(deleteReview(reviewId))
+  }
 }
 
 
@@ -210,8 +212,11 @@ const initialState = {};
         return newState;
 
       case ADD_REVIEW:
-        newState[action.spot.id] = action.spot
+        // newState.reviews.Reviews[action.payload.id] = action.payload
+        newState.reviews = newState.reviews || {}; // Initialize as an empty object if undefined
+        newState.reviews[newState.reviews.length] = action.payload
         return newState;
+
 
       case UPDATE_SPOT:
         newState[action.spot.id] = {
@@ -221,16 +226,12 @@ const initialState = {};
         return newState;
 
       case DELETE_SPOT:
-        // const { [action.spotId]: _, ...rest } = newState;
-        // return rest;
-        console.log(newState)
         newState = {...state};
         delete newState[action.spotId];
         return newState
 
       case DELETE_REVIEW:
         if (newState.reviews) {
-          console.log(newState)
           newState.reviews = newState.reviews.filter(
             (review) => review.id !== action.reviewId
           );

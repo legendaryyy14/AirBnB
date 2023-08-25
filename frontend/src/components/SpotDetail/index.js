@@ -12,8 +12,8 @@ const SpotDetail = () => {
 
   const spot = useSelector((state) => state.spots[spotId]);
   const reviewsObject = useSelector((state) => state.spots);
-  const reviews = reviewsObject.reviews ? reviewsObject.reviews : [];
-  console.log(reviewsObject);
+  // const reviews = reviewsObject.reviews ? reviewsObject.reviews : [];
+  const reviews = useSelector((state) => state.spots.reviews ? state.spots.reviews : []);
 
   useEffect(() => {
     dispatch(fetchOneSpot(spotId));
@@ -51,9 +51,8 @@ const SpotDetail = () => {
     }
   };
 
-  console.log("CONSOLE LOG ===>", reviews);
-
-
+  const userReviewed = reviews.some(review => review.User?.id == sessionUser.id);
+// const userReviewed = false
 
   return (
     <div>
@@ -99,19 +98,26 @@ const SpotDetail = () => {
             </p>
           </>
         )}
-        <div>
+        <div id="post-review">
+          {
+            userReviewed ? (
+              <p>You've already posted a review for this spot.</p>
+            ) : (
+
           <button
             onClick={() => setReviewForm(true)}
             className="revBtn"
             style={{
               display:
-                sessionUser && sessionUser.id !== spot?.Owner?.id
+                sessionUser && sessionUser?.id !== spot?.Owner?.id
                   ? "block"
                   : "none",
             }}
           >
             Post Your Review
           </button>
+            )
+          }
 
           <Modal
             isOpen={showReviewForm}
@@ -131,12 +137,12 @@ const SpotDetail = () => {
                 .slice()
                 .reverse()
                 .map((review) => (
-                  <div key={review.id}>
-                    <p>{review.User.firstName}</p>
+                  <div key={review?.id}>
+                    <p>{review.User?.firstName}</p>
                     <p>{formatMonthAndYear(review.updatedAt)}</p>
                     <p>{review.review}</p>
-                    {sessionUser && sessionUser.id === review.User.id && (
-                    <button onClick={() => handleDeleteReview(review.id)}>Delete</button>
+                    {sessionUser && sessionUser?.id === review.User?.id && (
+                    <button onClick={() => handleDeleteReview(review?.id)}>Delete</button>
                   )}
                   </div>
                 ))}
