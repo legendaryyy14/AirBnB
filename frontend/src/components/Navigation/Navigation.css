@@ -43,3 +43,44 @@ button {
   font-size: 14px;
   text-decoration: underline;
 }
+
+/* Navigation.css */
+
+/* ... other styles ... */
+
+/* Flex container for navigation elements */
+.navigation-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #fff; /* Set your desired background color */
+  border-bottom: 1px solid #ccc; /* Set your desired border style */
+}
+
+/* Styles for the left side navigation */
+.left-side {
+  display: flex;
+  align-items: center;
+}
+
+/* Styles for the right side navigation */
+.right-side {
+  display: flex;
+  align-items: center;
+}
+
+/* Styles for the middle navigation */
+.middle-side {
+  margin-left: auto; /* Pushes the middle content to the left */
+  margin-right: 20px; /* Add some left margin for spacing */
+}
+
+/* Create a New Spot link style */
+.create-spot-link {
+  color: #333; /* Set your desired color */
+  font-size: 16px;
+  text-decoration: none;
+  margin-right: 10px; /* Adjust the margin as needed */
+
+}

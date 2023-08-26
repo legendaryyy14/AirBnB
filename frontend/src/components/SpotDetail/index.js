@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { fetchOneSpot, getReviews, removeReview } from "../../store/spots";
 import Modal from "react-modal";
 import ReviewForm from "../ReviewFormModal";
+import "./SpotDetail.css"
 
 const SpotDetail = () => {
   const dispatch = useDispatch();

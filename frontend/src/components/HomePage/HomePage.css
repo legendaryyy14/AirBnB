@@ -1,0 +1,75 @@
+@import url(https://fonts.googleapis.com/css?family=Montserrat:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic);
+
+/* Styles for the spot grid container */
+.spot-tile-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Create columns that adjust based on browser size */
+  gap: 20px; /* Adjust the gap between spots */
+  margin-top: 60px; /* Add margin to the top */
+}
+
+/* Styles for each spot card */
+.spot-card {
+  background-color: #f9f9f9; /* Set your desired background color */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Set your desired box-shadow */
+  height: 70%;
+  flex-direction: row;
+}
+
+/* Styles for the spot info container */
+.spot-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 10px; /* Add margin to the top */
+}
+
+/* Styles for the spot details on the left side */
+.spot-details {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Styles for the spot ratings on the right side */
+.spot-ratings {
+  text-align: right;
+  margin-top: 14.7px;
+}
+
+.previmg {
+  width: 100%; /* Use max-width instead of fixed width */
+  height: 60%; /* Automatically adjust the height while maintaining aspect ratio */
+  border-radius: 10px;
+  overflow: hidden;
+
+  /* width: 400px;
+  height: 300px;
+  border-radius:10px;
+  overflow: hidden;
+  img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%
+  } */
+
+  /* border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+  max-width: 20px; /* Add this line to limit the image width */
+  /* max-height: 20px; */
+}
+
+a {
+  font-size: 14px;
+  color: black;
+  text-decoration: none;
+  font-family: 'Montserrat', sans-serif;
+  ;
+}
+
+/* Adjust the layout for smaller screens */
+@media (max-width: 768px) {
+  .spot-tile-list {
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); /* Adjust the columns to take up the full width */
+  }
+}
