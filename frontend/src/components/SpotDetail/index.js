@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect, useState } from "react";
 import { fetchOneSpot, getReviews, removeReview } from "../../store/spots";
@@ -7,6 +7,7 @@ import ReviewForm from "../ReviewFormModal";
 
 const SpotDetail = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const sessionUser = useSelector((state) => state.session.user);
   const { spotId } = useParams();
 
@@ -123,11 +124,11 @@ const SpotDetail = () => {
             isOpen={showReviewForm}
             onRequestClose={() => setReviewForm(false)}
           >
-            <ReviewForm />
+            <ReviewForm setReviewForm={setReviewForm}/>
           </Modal>
         </div>
         <div>
-          {reviews.length === 0 &&
+          {reviews?.length === 0 &&
           sessionUser &&
           sessionUser !== spot?.Owner ? (
             <p>Be the first to post a review!</p>
@@ -138,7 +139,7 @@ const SpotDetail = () => {
                 .reverse()
                 .map((review) => (
                   <div key={review?.id}>
-                    <p>{review.User?.firstName}</p>
+                    <p>{review?.User?.firstName}</p>
                     <p>{formatMonthAndYear(review.updatedAt)}</p>
                     <p>{review.review}</p>
                     {sessionUser && sessionUser?.id === review.User?.id && (

@@ -5,12 +5,11 @@ import './ReviewForm.css'
 import { getReviews, createReview } from '../../store/spots';
 
 
-const ReviewForm = () => {
+const ReviewForm = ({setReviewForm}) => {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
   const { spotId } = useParams();
 
-  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(0);
 
@@ -43,9 +42,11 @@ const ReviewForm = () => {
         stars: rating
       }
 
-      await dispatch(createReview(payload))
-      setModalIsOpen(false);
+      dispatch(createReview(payload))
       console.log('Review submitted:', { comment, rating });
+
+      setReviewForm(false);
+      window.location.reload();
     }
   };
 
@@ -76,7 +77,7 @@ const ReviewForm = () => {
             Submit Your Review
           </button>
         </form>
-        <button onClick={() => setModalIsOpen(false)}>Close</button>
+        <button onClick={() => setReviewForm(false)}>Close</button>
     </div>
   );
 };
