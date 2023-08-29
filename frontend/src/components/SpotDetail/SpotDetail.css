@@ -1,0 +1,154 @@
+@import url(https://fonts.googleapis.com/css?family=Montserrat:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic);
+
+
+/* Flex container for the main content */
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Left column containing preview image, description, and callout box */
+  .image section {
+    margin: 20px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Preview image */
+  .prev-img {
+    width: 50%;
+    height: 25%;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  /* Callout box */
+  .calloutBox {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 1);
+    /* flex-direction: column; */
+  }
+
+  /* Reviews section */
+  .reviews {
+    margin-top: 20px;
+  }
+
+  /* Review card */
+  .review-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+  }
+
+  /* Flex container for other images */
+  .other-img {
+    /* display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    /* grid-gap: 10px; */
+    margin: 20px;
+    width: 20%;
+    height: 20%;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  /* Right column containing reviews and review form */
+  .middle-section {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 20px 0;
+  }
+.top-sec {
+    gap: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.calloutBox button {
+    background-color: #72ace9;
+    color: white;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+
+#top-of-revs {
+    font-weight: bold;
+}
+
+#already-posted {
+    font-style: italic;
+    color: #174f06;
+}
+  /* Review form button */
+  .revBtn {
+    display: block;
+    margin-top: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+  /* Modal styles */
+  /* You might need to adjust these styles based on your design */
+  /* .Modal {
+    /* Your modal styles here */
+  /* } */
+
+  /* Delete review modal */
+  /* .delete-modal {
+    /* Your delete modal styles here */
+
+
+  /* Delete review modal buttons */
+  .delete-button {
+    background-color: #ef2a02;
+    color: white;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .cancel-button {
+    background-color: #7c8384;
+    color: white;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+.individual-review {
+    padding: 20px;
+}
+
+  div {
+    font-size: 14px;
+    color: black;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  h1 {
+    font-size: 50px;
+    color: black;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  button {
+    font-size: 14px;
+    color: black;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+  }

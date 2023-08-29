@@ -57,7 +57,7 @@ module.exports = {
         name: "Somewhere",
         description: "Place to do things",
         price: 124,
-        avgRating: 4.5,
+        avgRating: null,
       }
     ])
   },

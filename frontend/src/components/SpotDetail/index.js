@@ -1,4 +1,4 @@
-import { useParams, useHistory } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect, useState } from "react";
 import { fetchOneSpot, getReviews, removeReview } from "../../store/spots";
@@ -8,12 +8,11 @@ import "./SpotDetail.css"
 
 const SpotDetail = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
   const sessionUser = useSelector((state) => state.session.user);
   const { spotId } = useParams();
 
   const spot = useSelector((state) => state.spots[spotId]);
-  const reviewsObject = useSelector((state) => state.spots);
+  // const reviewsObject = useSelector((state) => state.spots);
   // const reviews = reviewsObject.reviews ? reviewsObject.reviews : [];
   const reviews = useSelector((state) => state.spots.reviews ? state.spots.reviews : []);
 
@@ -25,7 +24,6 @@ const SpotDetail = () => {
   const handleReserveClick = () => {
     alert("Feature coming soon");
   };
-
 
 
   const formatMonthAndYear = (dateString) => {
@@ -45,65 +43,84 @@ const SpotDetail = () => {
 
   const handleConfirmDelete = async () => {
     if (reviewToDelete) {
-      console.log(reviews)
       await dispatch(removeReview(reviewToDelete));
       setShowDeleteModal(false);
       setReviewToDelete(null);
-      dispatch(getReviews(spotId));
+      await dispatch(getReviews(spotId));
     }
   };
 
-  const userReviewed = reviews.some(review => review.User?.id == sessionUser.id);
+  const userReviewed = reviews?.some(review => review?.User?.id === sessionUser?.id);
 // const userReviewed = false
-
   return (
-    <div>
+    <div className="container">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic" rel="stylesheet" />
+
       <h1>{spot?.name}</h1>
       <p>
         {spot?.city}, {spot?.state}, {spot?.country}
       </p>
-      <img className="spotImg" src={`${spot?.previewImage}`} alt="spot_img" />
-      <div>
-        <h2>
+      <div className="image-section">
+      <img className="prev-img" src={`${spot?.SpotImages[0]?.url}`} alt="spot_img" />
+                <div className="image-columns">
+                  {spot?.SpotImages?.slice(1).map((image) => (
+                    <img className="other-img" src={`${image?.url}`} alt='other-img' key={image?.id}/>
+                  ))}
+                </div>
+      </div>
+      <div className="description">
+
+
+      </div>
+      <div className="middle-section">
+        <div>
+        <h2 >
           Hosted by {spot?.Owner?.firstName} {spot?.Owner?.lastName}
         </h2>
         <p>{spot?.description}</p>
-      </div>
+
+        </div>
       <div className="calloutBox">
-        <p>{spot?.price} night</p>
+        <div className="top-sec">
+        <p>${spot?.price} night</p>
         <i className="fa-solid fa-star"></i>
         <p>{spot?.avgRating}</p>
-        <button onClick={handleReserveClick}>Reserve</button>
-
-        {reviews && reviews.length > 0 && (
+        {reviews && reviews?.length && (
           <>
             <p className="dot">·</p>
             <p>
               {reviews.length === 1
-                ? `${reviews.length} review`
-                : `${reviews.length} reviews`}
+                ? `${reviews?.length} review`
+                : `${reviews?.length} reviews`}
             </p>
           </>
         )}
+        </div>
+
+        <button onClick={handleReserveClick}>Reserve</button>
       </div>
 
+      </div>
       <div className="reviews">
+        <div className="top-sec" id="top-of-revs">
+
         <i className="fa-solid fa-star"></i>
         <p>{spot?.avgRating}</p>
-        {reviews.length > 0 && (
+        {reviews?.length && (
           <>
             <p className="dot">·</p>
             <p>
-              {reviews.length === 1
-                ? `${reviews.length} review`
-                : `${reviews.length} reviews`}
+              {reviews?.length === 1
+                ? `${reviews?.length} review`
+                : `${reviews?.length} reviews`}
             </p>
           </>
         )}
+        </div>
         <div id="post-review">
           {
             userReviewed ? (
-              <p>You've already posted a review for this spot.</p>
+              <p id="already-posted">You've already posted a review for this spot.</p>
             ) : (
 
           <button
@@ -114,7 +131,7 @@ const SpotDetail = () => {
                 sessionUser && sessionUser?.id !== spot?.Owner?.id
                   ? "block"
                   : "none",
-            }}
+                }}
           >
             Post Your Review
           </button>
@@ -129,7 +146,7 @@ const SpotDetail = () => {
           </Modal>
         </div>
         <div>
-          {reviews?.length === 0 &&
+          {!reviews?.length &&
           sessionUser &&
           sessionUser !== spot?.Owner ? (
             <p>Be the first to post a review!</p>
@@ -139,12 +156,12 @@ const SpotDetail = () => {
                 .slice()
                 .reverse()
                 .map((review) => (
-                  <div key={review?.id}>
+                  <div className="individual-review" key={review?.id}>
                     <p>{review?.User?.firstName}</p>
-                    <p>{formatMonthAndYear(review.updatedAt)}</p>
-                    <p>{review.review}</p>
-                    {sessionUser && sessionUser?.id === review.User?.id && (
-                    <button onClick={() => handleDeleteReview(review?.id)}>Delete</button>
+                    <p>{formatMonthAndYear(review?.updatedAt)}</p>
+                    <p>{review?.review}</p>
+                    {sessionUser && sessionUser?.id === review?.User?.id && (
+                    <button className="delete-button" onClick={() => handleDeleteReview(review?.id)}>Delete</button>
                   )}
                   </div>
                 ))}
