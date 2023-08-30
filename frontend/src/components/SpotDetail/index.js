@@ -173,6 +173,7 @@ const SpotDetail = () => {
         isOpen={showDeleteModal}
         onRequestClose={() => setShowDeleteModal(false)}
         contentLabel="Confirm Delete"
+        className="modal"
       >
         <h2>Confirm Delete</h2>
         <p>Are you sure you want to delete this review?</p>

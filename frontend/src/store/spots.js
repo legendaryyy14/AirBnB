@@ -116,6 +116,7 @@ export const createSpotImage = (spotId, payload) => async dispatch => {
 
   if(res.ok) {
     const createdImage = await res.json();
+    console.log(createdImage)
     dispatch(addSpotImage(createdImage))
     return createdImage
   }
@@ -205,10 +206,7 @@ const initialState = {};
           };
 
       case ADD_IMAGE:
-        newState[action.image.spotId].image = {
-          ...action.image,
-
-        }
+        newState[action.image.spotId].SpotImages = action.image
         return newState;
 
       case ADD_REVIEW:

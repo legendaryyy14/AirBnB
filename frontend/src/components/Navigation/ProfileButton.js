@@ -5,6 +5,7 @@ import LoginFormPage from '../LoginFormPage';
 import SignupFormPage from '../SignupFormPage';
 import Modal from 'react-modal'
 import { NavLink, useHistory } from "react-router-dom";
+import "./Navigation.css"
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -67,6 +68,7 @@ function ProfileButton({ user }) {
               <Modal
                 isOpen={showLoginModal}
                 onRequestClose={() => setShowLoginModal(false)}
+                className="modal"
               >
                 <LoginFormPage />
               </Modal>
@@ -77,6 +79,7 @@ function ProfileButton({ user }) {
               <Modal
                 isOpen={showSignUpModal}
                 onRequestClose={() => setShowSignUpModal(false)}
+                className="modal"
               >
                 <SignupFormPage />
               </Modal>

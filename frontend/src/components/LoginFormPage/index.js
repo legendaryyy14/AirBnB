@@ -30,7 +30,7 @@ function LoginFormPage() {
   };
 
   return (
-    <div>
+    <div className="login-modal">
       <h1>Log In</h1>
       <form onSubmit={handleSubmit}>
         <label>
@@ -52,8 +52,11 @@ function LoginFormPage() {
           />
         </label>
         {errors.credential && <p>{errors.credential}</p>}
-        <button type="submit" disabled={ credential.length < 4 || password.length < 6}>Log In</button>
-        <button type="button" onClick={handleDemoLogin}>Demo User</button>
+        <div className="form-row">
+        <button className="login-btn" type="submit" disabled={ credential.length < 4 || password.length < 6}>Log In</button>
+        <button className="demo-user" type="button" onClick={handleDemoLogin}>Demo User</button>
+
+        </div>
       </form>
     </div>
   );

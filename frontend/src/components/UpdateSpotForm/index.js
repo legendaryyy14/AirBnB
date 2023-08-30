@@ -19,7 +19,11 @@ const UpdateSpotForm = () => {
   const [name, setName] = useState(spot?.name);
   const [description, setDescription] = useState(spot?.description);
   const [price, setPrice] = useState(spot?.price);
-  const [urls, setUrls] = useState([]);
+  const [prevUrl, setPrevUrl] = useState(spot?.previewImage);
+  const [firstUrl, setFirstUrl] = useState("");
+  const [secondUrl, setSecondUrl] = useState("");
+  const [thirdUrl, setThirdUrl] = useState("");
+  const [fourthUrl, setFourthUrl] = useState("");
   const [errors, setErrors] = useState({});
 
   const updateAddress = (e) => setAddress(e.target.value);
@@ -29,12 +33,12 @@ const UpdateSpotForm = () => {
   const updateName = (e) => setName(e.target.value);
   const updateDescription = (e) => setDescription(e.target.value);
   const updatePrice = (e) => setPrice(e.target.value);
-  const updateUrls = (e) => {
-    const newValue = e.target.value;
-    setUrls([...urls, newValue]);
-  };
+  const updatePrevUrl = (e) => setPrevUrl(e.target.value);
+  const updateFirstUrl = (e) => setFirstUrl(e.target.value);
+  const updateSecondUrl = (e) => setSecondUrl(e.target.value);
+  const updateThirdUrl = (e) => setThirdUrl(e.target.value);
+  const updateFourthUrl = (e) => setFourthUrl(e.target.value);
 
-console.log(urls)
   useEffect(() => {
     dispatch(fetchUserSpots());
     const errors = {};
@@ -46,10 +50,10 @@ console.log(urls)
     if (!name.length) errors.name = "Name is required";
     if (description.length < 30) errors.description = "Description must be at least 30 characters long";
     if (!price) errors.price = "Price per night is required";
-    // if (!urls.length) errors.urls = "Preview image is required"
+    if (!prevUrl) errors.prevUrl = "Preview image is required"
 
     setErrors(errors);
-  }, [dispatch, spotId, address, city, state, country, name, description, price, urls]);
+  }, [dispatch, spotId, address, city, state, country, name, description, price, prevUrl]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -71,9 +75,10 @@ console.log(urls)
 
     let updatedSpot = await dispatch(editSpot(payload));
 
-    // console.log("CONSOLE LOG ===>", spotImagesPromises);
+    console.log("CONSOLE LOG ===>", updatedSpot);
 
     if (updatedSpot && updatedSpot.id) {
+      const urls = [prevUrl, firstUrl, secondUrl, thirdUrl, fourthUrl]
       const validUrls = urls.filter(url => isValidImageUrl(url));
 
       if (validUrls.length === 0) {
@@ -214,41 +219,41 @@ console.log(urls)
           <input
             type="text"
             placeholder="Preview Image URL"
-            value={urls[0] || ""}
-            onChange={updateUrls}
+            value={prevUrl}
+            onChange={updatePrevUrl}
           />
-          <p className="errors">{errors.urls}</p>
+          <p className="errors">{errors.prevUrl}</p>
           <input
             type="text"
             placeholder="Image URL"
-            value={urls[1] || ""}
-            onChange={updateUrls}
-          />
-          <p className="errors">{errors.image}</p>
-          <input
-            type="text"
-            placeholder="Image URL"
-            value={urls[2] || ""}
-            onChange={updateUrls}
+            value={firstUrl}
+            onChange={updateFirstUrl}
           />
           <p className="errors">{errors.image}</p>
           <input
             type="text"
             placeholder="Image URL"
-            value={urls[3] || ""}
-            onChange={updateUrls}
+            value={secondUrl}
+            onChange={updateSecondUrl}
           />
           <p className="errors">{errors.image}</p>
           <input
             type="text"
             placeholder="Image URL"
-            value={urls[4] || ""}
-            onChange={updateUrls}
+            value={thirdUrl}
+            onChange={updateThirdUrl}
+          />
+          <p className="errors">{errors.image}</p>
+          <input
+            type="text"
+            placeholder="Image URL"
+            value={fourthUrl}
+            onChange={updateFourthUrl}
           />
           <p className="errors">{errors.image}</p>
         </section>
 
-        <button type="submit" disabled={!country || !address || !city || !state || !description || !name || !price || !urls[0] }>Update your Spot</button>
+        <button type="submit" disabled={!country || !address || !city || !state || !description || !name || !price || !prevUrl }>Update your Spot</button>
 
       </form>
     </div>

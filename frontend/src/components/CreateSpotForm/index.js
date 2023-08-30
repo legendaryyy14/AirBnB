@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { fetchSpots, createSpot, createSpotImage } from "../../store/spots";
+import { fetchSpots, fetchOneSpot, createSpot, createSpotImage } from "../../store/spots";
 
 const CreateSpotForm = () => {
   const dispatch = useDispatch();
@@ -15,7 +15,11 @@ const CreateSpotForm = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [urls, setUrls] = useState([]);
+  const [prevUrl, setPrevUrl] = useState("");
+  const [firstUrl, setFirstUrl] = useState("");
+  const [secondUrl, setSecondUrl] = useState("");
+  const [thirdUrl, setThirdUrl] = useState("");
+  const [fourthUrl, setFourthUrl] = useState("");
   const [errors, setErrors] = useState({});
 
   const updateAddress = (e) => setAddress(e.target.value);
@@ -25,10 +29,11 @@ const CreateSpotForm = () => {
   const updateName = (e) => setName(e.target.value);
   const updateDescription = (e) => setDescription(e.target.value);
   const updatePrice = (e) => setPrice(e.target.value);
-  const updateUrls = (e) => {
-    const newValue = e.target.value;
-    setUrls([...urls, newValue]);
-  };
+  const updatePrevUrl = (e) => setPrevUrl(e.target.value);
+  const updateFirstUrl = (e) => setFirstUrl(e.target.value);
+  const updateSecondUrl = (e) => setSecondUrl(e.target.value);
+  const updateThirdUrl = (e) => setThirdUrl(e.target.value);
+  const updateFourthUrl = (e) => setFourthUrl(e.target.value);
 
 
   useEffect(() => {
@@ -42,11 +47,10 @@ const CreateSpotForm = () => {
     if (!name.length) errors.name = "Name is required";
     if (description.length < 30) errors.description = "Description must be at least 30 characters long";
     if (!price) errors.price = "Price per night is required";
-    if (!urls.length) errors.urls = "Preview image is required"
+    if (!prevUrl) errors.urls = "Preview image is required"
 
     setErrors(errors);
-  }, [dispatch, address, city, state, country, name, description, price, urls]);
-  console.log(urls)
+  }, [dispatch, address, city, state, country, name, description, price, prevUrl]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -67,33 +71,39 @@ const CreateSpotForm = () => {
 
 
 
-    let createdSpot = await dispatch(createSpot(payload));
+    const createdSpot = await dispatch(createSpot(payload));
+
+    if (createdSpot) {
+      const newSpot = await dispatch(fetchOneSpot(createdSpot?.id))
+      console.log("HELLO")
+      if (newSpot) {
+        const urls = [prevUrl, firstUrl, secondUrl, thirdUrl, fourthUrl].filter(url => url.length > 0);
+
+          const validUrls = urls.filter(url => isValidImageUrl(url));
+
+          if (validUrls.length === 0) {
+              setErrors({image: "Image URL must end in .png, .jpg, or .jpeg"});
+              return
+          }
+
+          urls.map(async (url, index) => {
+          let img ={
+            url,
+            preview: index === 0, // Set preview to true for the first image, false for others
+            spotId: Number(newSpot.id),
+          };
+          console.log(img)
+          await dispatch(createSpotImage(newSpot.id, img));
 
 
-    if (createdSpot && createdSpot.id) {
-        const validUrls = urls.filter(url => isValidImageUrl(url));
+        });
+          // newSpot.SpotImages = spotImgs
 
-        if (validUrls.length === 0) {
-            setErrors({image: "Image URL must end in .png, .jpg, or .jpeg"});
-            return
-        }
 
-        const spotImagesPromises = urls.map(async (url, index) => {
-        const imagesPayload = {
-          url,
-          preview: index === 0, // Set preview to true for the first image, false for others
-          spotId: Number(createdSpot.id),
-        };
+          history.push(`/spots/${newSpot.id}`);
 
-        return await dispatch(createSpotImage(createdSpot.id, imagesPayload));
-      });
-
-      // Wait for all spot image creation promises to resolve
-      const createdImages = await Promise.all(spotImagesPromises);
-
-      if (createdImages.every((image) => !!image)) {
-        history.push(`/spots/${createdSpot.id}`);
       }
+
     }
   };
 
@@ -211,41 +221,41 @@ const CreateSpotForm = () => {
           <input
             type="text"
             placeholder="Preview Image URL"
-            value={urls[0] || ""}
-            onChange={updateUrls}
+            value={prevUrl}
+            onChange={updatePrevUrl}
           />
           <p className="errors">{errors.urls}</p>
           <input
             type="text"
             placeholder="Image URL"
-            value={urls[1] || ""}
-            onChange={updateUrls}
+            value={firstUrl}
+            onChange={updateFirstUrl}
           />
           <p className="errors">{errors.image}</p>
           <input
             type="text"
             placeholder="Image URL"
-            value={urls[2] || ""}
-            onChange={updateUrls}
+            value={secondUrl}
+            onChange={updateSecondUrl}
           />
           <p className="errors">{errors.image}</p>
           <input
             type="text"
             placeholder="Image URL"
-            value={urls[3] || ""}
-            onChange={updateUrls}
+            value={thirdUrl}
+            onChange={updateThirdUrl}
           />
           <p className="errors">{errors.image}</p>
           <input
             type="text"
             placeholder="Image URL"
-            value={urls[4] || ""}
-            onChange={updateUrls}
+            value={fourthUrl}
+            onChange={updateFourthUrl}
           />
           <p className="errors">{errors.image}</p>
         </section>
 
-        <button type="submit" disabled={!country || !address || !city || !state || !description || !name || !price || !urls[0] }>Create Spot</button>
+        <button type="submit" disabled={!country || !address || !city || !state || !description || !name || !price || !prevUrl }>Create Spot</button>
 
       </form>
     </div>
