@@ -79,6 +79,7 @@ export const fetchOneSpot = (id) => async dispatch => {
 
     if (res.ok) {
       dispatch(getOneSpot(spot))
+      return spot
     }
 };
 
@@ -105,8 +106,8 @@ export const getReviews = (id) => async dispatch => {
   }
 }
 
-export const createSpotImage = (spotId, payload) => async dispatch => {
-  const res = await csrfFetch(`/api/spots/${spotId}/images`, {
+export const createSpotImage = (id, payload) => async dispatch => {
+  const res = await csrfFetch(`/api/spots/${id}/images`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -206,7 +207,9 @@ const initialState = {};
           };
 
       case ADD_IMAGE:
-        newState[action.image.spotId].SpotImages = action.image
+        console.log(state.spots)
+        newState.spots[newState.length].SpotImages = newState.spots[newState.length].SpotImages.push(action.image)
+        // newState.spot[action.image.spotId].SpotImages.push(action.image)
         return newState;
 
       case ADD_REVIEW:

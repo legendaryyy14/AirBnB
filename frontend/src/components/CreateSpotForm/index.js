@@ -72,10 +72,12 @@ const CreateSpotForm = () => {
 
 
     const createdSpot = await dispatch(createSpot(payload));
+console.log(createdSpot)
 
     if (createdSpot) {
       const newSpot = await dispatch(fetchOneSpot(createdSpot?.id))
-      console.log("HELLO")
+      console.log("HELLO", newSpot)
+
       if (newSpot) {
         const urls = [prevUrl, firstUrl, secondUrl, thirdUrl, fourthUrl].filter(url => url.length > 0);
 
@@ -90,22 +92,26 @@ const CreateSpotForm = () => {
           let img ={
             url,
             preview: index === 0, // Set preview to true for the first image, false for others
-            spotId: Number(newSpot.id),
+            // spotId: Number(newSpot.id),
           };
           console.log(img)
-          await dispatch(createSpotImage(newSpot.id, img));
 
-
+          try {
+            await dispatch(createSpotImage(newSpot.id, img));
+          } catch (error) {
+            console.error("Error creating spot image:", error);
+          }
         });
-          // newSpot.SpotImages = spotImgs
 
+console.log("BYE", newSpot)
 
-          history.push(`/spots/${newSpot.id}`);
+          history.push(`/spots/${newSpot?.id}`);
 
       }
 
     }
   };
+
 
   const isValidImageUrl = (url) => {
     const validExtensions = [".png", ".jpg", ".jpeg"];
