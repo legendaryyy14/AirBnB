@@ -10,11 +10,11 @@ const SpotDetail = () => {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
   const { spotId } = useParams();
-
   const spot = useSelector((state) => state.spots[spotId]);
-  // const reviewsObject = useSelector((state) => state.spots);
-  // const reviews = reviewsObject.reviews ? reviewsObject.reviews : [];
   const reviews = useSelector((state) => state.spots.reviews ? state.spots.reviews : []);
+
+  const previewImage = spot?.SpotImages && spot.SpotImages.length > 0 ? spot.SpotImages[0].url : null;
+
 
   useEffect(() => {
     dispatch(fetchOneSpot(spotId));
@@ -61,7 +61,7 @@ const SpotDetail = () => {
         {spot?.city}, {spot?.state}, {spot?.country}
       </p>
       <div className="image-section">
-      <img className="prev-img" src={`${spot?.SpotImages[0]?.url}`} alt="spot_img" />
+      <img className="prev-img" src={`${previewImage}`} alt="spot_img" />
                 <div className="image-columns">
                   {spot?.SpotImages?.slice(1).map((image) => (
                     <img className="other-img" src={`${image?.url}`} alt='other-img' key={image?.id}/>

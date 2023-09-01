@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { fetchUserSpots, createSpotImage, editSpot } from "../../store/spots";
+import { fetchUserSpots, editSpot } from "../../store/spots";
 
 const UpdateSpotForm = () => {
   const dispatch = useDispatch();
@@ -9,8 +9,6 @@ const UpdateSpotForm = () => {
   const {spotId } = useParams();
   const spot = useSelector((state) => state.spots[spotId]);
   const history = useHistory();
-
-  console.log(spot) // cant get access to spot urls
 
   const [address, setAddress] = useState(spot?.address);
   const [city, setCity] = useState(spot?.city);
@@ -20,10 +18,6 @@ const UpdateSpotForm = () => {
   const [description, setDescription] = useState(spot?.description);
   const [price, setPrice] = useState(spot?.price);
   const [prevUrl, setPrevUrl] = useState(spot?.previewImage);
-  const [firstUrl, setFirstUrl] = useState("");
-  const [secondUrl, setSecondUrl] = useState("");
-  const [thirdUrl, setThirdUrl] = useState("");
-  const [fourthUrl, setFourthUrl] = useState("");
   const [errors, setErrors] = useState({});
 
   const updateAddress = (e) => setAddress(e.target.value);
@@ -33,11 +27,7 @@ const UpdateSpotForm = () => {
   const updateName = (e) => setName(e.target.value);
   const updateDescription = (e) => setDescription(e.target.value);
   const updatePrice = (e) => setPrice(e.target.value);
-  const updatePrevUrl = (e) => setPrevUrl(e.target.value);
-  const updateFirstUrl = (e) => setFirstUrl(e.target.value);
-  const updateSecondUrl = (e) => setSecondUrl(e.target.value);
-  const updateThirdUrl = (e) => setThirdUrl(e.target.value);
-  const updateFourthUrl = (e) => setFourthUrl(e.target.value);
+
 
   useEffect(() => {
     dispatch(fetchUserSpots());
@@ -50,10 +40,9 @@ const UpdateSpotForm = () => {
     if (!name.length) errors.name = "Name is required";
     if (description.length < 30) errors.description = "Description must be at least 30 characters long";
     if (!price) errors.price = "Price per night is required";
-    if (!prevUrl) errors.prevUrl = "Preview image is required"
 
     setErrors(errors);
-  }, [dispatch, spotId, address, city, state, country, name, description, price, prevUrl]);
+  }, [dispatch, spotId, address, city, state, country, name, description, price]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -73,43 +62,15 @@ const UpdateSpotForm = () => {
       lng: 45.374
     };
 
-    let updatedSpot = await dispatch(editSpot(payload));
 
-    console.log("CONSOLE LOG ===>", updatedSpot);
 
-    if (updatedSpot && updatedSpot.id) {
-      const urls = [prevUrl, firstUrl, secondUrl, thirdUrl, fourthUrl]
-      const validUrls = urls.filter(url => isValidImageUrl(url));
 
-      if (validUrls.length === 0) {
-            setErrors({image: "Image URL must end in .png, .jpg, or .jpeg"});
-            return
-        }
+    const updatedSpot = await dispatch(editSpot(payload));
+    history.push(`/spots/${updatedSpot?.id}`);
 
-        const spotImagesPromises = urls.map(async (url, index) => {
-        const imagesPayload = {
-          url,
-          preview: index === 0, // Set preview to true for the first image, false for others
-          spotId: Number(updatedSpot.id),
-        };
-
-        return await dispatch(createSpotImage(updatedSpot.id, imagesPayload));
-      });
-
-      // Wait for all spot image creation promises to resolve
-      const createdImages = await Promise.all(spotImagesPromises);
-
-      if (createdImages.every((image) => !!image)) {
-        history.push(`/spots/${updatedSpot.id}`);
-      }
-    }
   };
 
-  const isValidImageUrl = (url) => {
-    const validExtensions = [".png", ".jpg", ".jpeg"];
-    const lowerCaseUrl = url.toLowerCase();
-    return validExtensions.some((ext) => lowerCaseUrl.endsWith(ext));
-  };
+
 
 
   return (
@@ -213,45 +174,7 @@ const UpdateSpotForm = () => {
           <p className="errors">{errors.price}</p>
         </section>
 
-        <section className="spot-images">
-          <h2>Liven up your spot with photos</h2>
-          <p>Submit a link to at least one photo to publish your spot.</p>
-          <input
-            type="text"
-            placeholder="Preview Image URL"
-            value={prevUrl}
-            onChange={updatePrevUrl}
-          />
-          <p className="errors">{errors.prevUrl}</p>
-          <input
-            type="text"
-            placeholder="Image URL"
-            value={firstUrl}
-            onChange={updateFirstUrl}
-          />
-          <p className="errors">{errors.image}</p>
-          <input
-            type="text"
-            placeholder="Image URL"
-            value={secondUrl}
-            onChange={updateSecondUrl}
-          />
-          <p className="errors">{errors.image}</p>
-          <input
-            type="text"
-            placeholder="Image URL"
-            value={thirdUrl}
-            onChange={updateThirdUrl}
-          />
-          <p className="errors">{errors.image}</p>
-          <input
-            type="text"
-            placeholder="Image URL"
-            value={fourthUrl}
-            onChange={updateFourthUrl}
-          />
-          <p className="errors">{errors.image}</p>
-        </section>
+
 
         <button type="submit" disabled={!country || !address || !city || !state || !description || !name || !price || !prevUrl }>Update your Spot</button>
 

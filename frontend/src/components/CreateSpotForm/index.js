@@ -71,22 +71,21 @@ const CreateSpotForm = () => {
 
 
 
+    const urls = [prevUrl, firstUrl, secondUrl, thirdUrl, fourthUrl].filter(url => url.length > 0);
+
+    const validUrls = urls.filter(url => isValidImageUrl(url));
+
+      if (validUrls.length === 0) {
+          setErrors({image: "Image URL must end in .png, .jpg, or .jpeg"});
+          return
+      }
     const createdSpot = await dispatch(createSpot(payload));
-console.log(createdSpot)
 
     if (createdSpot) {
       const newSpot = await dispatch(fetchOneSpot(createdSpot?.id))
       console.log("HELLO", newSpot)
 
       if (newSpot) {
-        const urls = [prevUrl, firstUrl, secondUrl, thirdUrl, fourthUrl].filter(url => url.length > 0);
-
-          const validUrls = urls.filter(url => isValidImageUrl(url));
-
-          if (validUrls.length === 0) {
-              setErrors({image: "Image URL must end in .png, .jpg, or .jpeg"});
-              return
-          }
 
           urls.map(async (url, index) => {
           let img ={
@@ -97,13 +96,11 @@ console.log(createdSpot)
           console.log(img)
 
           try {
-            await dispatch(createSpotImage(newSpot.id, img));
+            await dispatch(createSpotImage(newSpot?.id, img));
           } catch (error) {
             console.error("Error creating spot image:", error);
           }
         });
-
-console.log("BYE", newSpot)
 
           history.push(`/spots/${newSpot?.id}`);
 

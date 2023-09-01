@@ -55,6 +55,8 @@ const deleteReview = reviewId => ({
   reviewId
 })
 
+
+
 export const fetchSpots = () => async dispatch => {
     const res = await csrfFetch('/api/spots');
 
@@ -141,7 +143,7 @@ export const createReview = (payload) => async dispatch => {
 }
 
 export const editSpot = (payload) => async dispatch => {
-  const res = await fetch(`/api/spots/${payload.id}`, {
+  const res = await csrfFetch(`/api/spots/${payload.id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"
@@ -177,6 +179,7 @@ export const removeReview = reviewId => async (dispatch) => {
 }
 
 
+
 const initialState = {};
 
   const spotsReducer = (state = initialState, action) => {
@@ -207,10 +210,17 @@ const initialState = {};
           };
 
       case ADD_IMAGE:
-        console.log(state.spots)
-        newState.spots[newState.length].SpotImages = newState.spots[newState.length].SpotImages.push(action.image)
-        // newState.spot[action.image.spotId].SpotImages.push(action.image)
-        return newState;
+        const spotId = action.image.spotId;
+        const updatedSpots = { ...state.spots };
+
+        if (updatedSpots[spotId]) {
+          updatedSpots[spotId].SpotImages = [...updatedSpots[spotId].SpotImages, action.image];
+        }
+
+        return {
+          ...state,
+          spots: updatedSpots,
+        };
 
       case ADD_REVIEW:
         // newState.reviews.Reviews[action.payload.id] = action.payload
@@ -238,6 +248,7 @@ const initialState = {};
           );
         }
         return newState
+
 
       default:
         return state;
