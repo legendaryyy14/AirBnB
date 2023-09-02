@@ -6,6 +6,8 @@ const LOAD_REVIEWS = "spots/LOAD_REVIEWS"
 const ADD_IMAGE = "spots/ADD_IMAGE"
 const ADD_REVIEW = "spots/ADD_REVIEW"
 const UPDATE_SPOT = "spots/UPDATE_SPOT"
+const DELETE_SPOT = "spots/DELETE_SPOT"
+const DELETE_REVIEW = "spots/DELETE_REVIEW"
 
 const load = allSpots => ({
     type: LOAD,
@@ -35,13 +37,25 @@ const addSpotImage = image => ({
 
 const addReview = review => ({
   type: ADD_REVIEW,
-  review
+  payload: review
 })
 
 const updateSpot = spot => ({
   type: UPDATE_SPOT,
   spot
 })
+
+const deleteSpot = spotId => ({
+  type: DELETE_SPOT,
+  spotId
+})
+
+const deleteReview = reviewId => ({
+  type: DELETE_REVIEW,
+  reviewId
+})
+
+
 
 export const fetchSpots = () => async dispatch => {
     const res = await csrfFetch('/api/spots');
@@ -67,6 +81,7 @@ export const fetchOneSpot = (id) => async dispatch => {
 
     if (res.ok) {
       dispatch(getOneSpot(spot))
+      return spot
     }
 };
 
@@ -93,8 +108,8 @@ export const getReviews = (id) => async dispatch => {
   }
 }
 
-export const createSpotImage = (spotId, payload) => async dispatch => {
-  const res = await csrfFetch(`/api/spots/${spotId}/images`, {
+export const createSpotImage = (id, payload) => async dispatch => {
+  const res = await csrfFetch(`/api/spots/${id}/images`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -104,14 +119,15 @@ export const createSpotImage = (spotId, payload) => async dispatch => {
 
   if(res.ok) {
     const createdImage = await res.json();
+    console.log(createdImage)
     dispatch(addSpotImage(createdImage))
     return createdImage
   }
 
 };
 
-export const createReview = (spotId, payload) => async dispatch => {
-  const res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+export const createReview = (payload) => async dispatch => {
+  const res = await csrfFetch(`/api/spots/${payload.spotId}/reviews`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -121,13 +137,13 @@ export const createReview = (spotId, payload) => async dispatch => {
 
   if (res.ok) {
     const createdReview = await res.json();
-    dispatch(addReview(createReview));
-    return createReview;
+    dispatch(addReview(createdReview));
+    return createdReview;
   }
 }
 
 export const editSpot = (payload) => async dispatch => {
-  const res = await fetch(`/spots/${payload.id}`, {
+  const res = await csrfFetch(`/api/spots/${payload.id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"
@@ -141,6 +157,28 @@ export const editSpot = (payload) => async dispatch => {
     return updatedSpot
   }
 }
+
+export const removeSpot = (spotId) => async (dispatch) => {
+  const res = await csrfFetch(`/api/spots/${spotId}`, {
+    method: "DELETE",
+  });
+
+  if (res.ok) {
+    dispatch(deleteSpot(spotId));
+  }
+};
+
+export const removeReview = reviewId => async (dispatch) => {
+  const res = await csrfFetch(`/api/reviews/${reviewId}`, {
+    method: 'DELETE'
+  });
+
+  if (res.ok) {
+    dispatch(deleteReview(reviewId))
+  }
+}
+
+
 
 const initialState = {};
 
@@ -172,22 +210,44 @@ const initialState = {};
           };
 
       case ADD_IMAGE:
-        newState[action.image.spotId].image = {
-          ...action.image,
+        const spotId = action.image.spotId;
+        const updatedSpots = { ...state.spots };
 
+        if (updatedSpots[spotId]) {
+          updatedSpots[spotId].SpotImages = [...updatedSpots[spotId].SpotImages, action.image];
         }
-        return newState;
+
+        return {
+          ...state,
+          spots: updatedSpots,
+        };
 
       case ADD_REVIEW:
-        newState[action.spot.id] = action.spot
+        // newState.reviews.Reviews[action.payload.id] = action.payload
+        newState.reviews = newState.reviews || {}; // Initialize as an empty object if undefined
+        newState.reviews[newState.reviews.length] = action.payload
         return newState;
+
 
       case UPDATE_SPOT:
         newState[action.spot.id] = {
-          ...newState[action.spot.id], // Copy existing spot data
-          ...action.spot, // Update with new spot data
+          ...newState[action.spot.id],
+          ...action.spot,
         };
         return newState;
+
+      case DELETE_SPOT:
+        newState = {...state};
+        delete newState[action.spotId];
+        return newState
+
+      case DELETE_REVIEW:
+        if (newState.reviews) {
+          newState.reviews = newState.reviews.filter(
+            (review) => review.id !== action.reviewId
+          );
+        }
+        return newState
 
 
       default:

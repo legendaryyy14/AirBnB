@@ -43,3 +43,94 @@ button {
   font-size: 14px;
   text-decoration: underline;
 }
+
+/* Navigation.css */
+/* .modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+} */
+/* ... other styles ... */
+
+/* Flex container for navigation elements */
+.navigation-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #fff; /* Set your desired background color */
+  border-bottom: 1px solid #ccc; /* Set your desired border style */
+}
+
+/* Styles for the left side navigation */
+.left-side {
+  display: flex;
+  align-items: center;
+}
+
+/* Styles for the right side navigation */
+.right-side {
+  display: flex;
+  align-items: center;
+}
+
+/* Styles for the middle navigation */
+.middle-side {
+  margin-left: auto; /* Pushes the middle content to the left */
+  margin-right: 20px; /* Add some left margin for spacing */
+}
+
+/* Create a New Spot link style */
+.create-spot-link {
+  color: #333; /* Set your desired color */
+  font-size: 16px;
+  text-decoration: none;
+  margin-right: 10px; /* Adjust the margin as needed */
+
+}
+
+div {
+  font-size: 14px;
+  color: black;
+  text-decoration: none;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* .login-btn {
+  background-color: #2f96a6;
+  color: white;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.demo-user {
+  background-color: #7c8384;
+  color: white;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.login-modal {
+  flex-direction: column;
+  display: flex-box;
+} */
+
+
+/* .form-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+} */
+
+/* Add media query for smaller screens */
+@media (max-width: 600px) {
+  .login-modal {
+    width: 80%; /* Adjust the width for smaller screens */
+  }
+}

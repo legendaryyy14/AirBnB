@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { fetchUserSpots, createSpotImage, editSpot } from "../../store/spots";
+import { fetchUserSpots, editSpot } from "../../store/spots";
 
 const UpdateSpotForm = () => {
   const dispatch = useDispatch();
@@ -9,8 +9,6 @@ const UpdateSpotForm = () => {
   const {spotId } = useParams();
   const spot = useSelector((state) => state.spots[spotId]);
   const history = useHistory();
-  console.log("CONSOLE LOG ===>", spot);
-
 
   const [address, setAddress] = useState(spot?.address);
   const [city, setCity] = useState(spot?.city);
@@ -19,7 +17,6 @@ const UpdateSpotForm = () => {
   const [name, setName] = useState(spot?.name);
   const [description, setDescription] = useState(spot?.description);
   const [price, setPrice] = useState(spot?.price);
-  const [urls, setUrls] = useState(["something"]);
   const [errors, setErrors] = useState({});
 
   const updateAddress = (e) => setAddress(e.target.value);
@@ -29,10 +26,6 @@ const UpdateSpotForm = () => {
   const updateName = (e) => setName(e.target.value);
   const updateDescription = (e) => setDescription(e.target.value);
   const updatePrice = (e) => setPrice(e.target.value);
-  const updateUrls = (e) => {
-    const newValue = e.target.value;
-    setUrls([...urls, newValue]);
-  };
 
 
   useEffect(() => {
@@ -46,16 +39,16 @@ const UpdateSpotForm = () => {
     if (!name.length) errors.name = "Name is required";
     if (description.length < 30) errors.description = "Description must be at least 30 characters long";
     if (!price) errors.price = "Price per night is required";
-    // if (!urls.length) errors.urls = "Preview image is required"
 
     setErrors(errors);
-  }, [dispatch, spotId, address, city, state, country, name, description, price, urls]);
+  }, [dispatch, spotId, address, city, state, country, name, description, price]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
 
     const payload = {
+      id: spotId,
       ownerId: sessionUser.id,
       address,
       city,
@@ -68,48 +61,22 @@ const UpdateSpotForm = () => {
       lng: 45.374
     };
 
-    let updatedSpot = await dispatch(editSpot(payload));
 
 
-    if (updatedSpot && updatedSpot.id) {
-        const validUrls = urls.filter(url => isValidImageUrl(url));
 
-        if (validUrls.length === 0) {
-            setErrors({image: "Image URL must end in .png, .jpg, or .jpeg"});
-            return
-        }
+    const updatedSpot = await dispatch(editSpot(payload));
+    history.push(`/spots/${updatedSpot?.id}`);
 
-        const spotImagesPromises = urls.map(async (url, index) => {
-        const imagesPayload = {
-          url,
-          preview: index === 0, // Set preview to true for the first image, false for others
-          spotId: Number(updatedSpot.id),
-        };
-
-        return await dispatch(createSpotImage(updatedSpot.id, imagesPayload));
-      });
-
-      // Wait for all spot image creation promises to resolve
-      const createdImages = await Promise.all(spotImagesPromises);
-
-      if (createdImages.every((image) => !!image)) {
-        history.push(`/spots/${updatedSpot.id}`);
-      }
-    }
   };
 
-  const isValidImageUrl = (url) => {
-    const validExtensions = [".png", ".jpg", ".jpeg"];
-    const lowerCaseUrl = url.toLowerCase();
-    return validExtensions.some((ext) => lowerCaseUrl.endsWith(ext));
-  };
+
 
 
   return (
     <div>
-      <form className="edit-spot-form" onSubmit={handleSubmit}>
+      <form className="spot-form" onSubmit={handleSubmit}>
         <section className="location">
-          <h2>Update your Spot</h2>
+          <h1>Update your Spot</h1>
           <p>Where's your place located?</p>
           <p>
             Guests will only get your exact address once they booked a
@@ -117,8 +84,11 @@ const UpdateSpotForm = () => {
           </p>
 
           <label>
+            <div className="form-row">
             Country
             <p className="errors">{errors.country}</p>
+
+            </div>
             <input
               type="text"
               placeholder="Country"
@@ -128,8 +98,11 @@ const UpdateSpotForm = () => {
           </label>
 
           <label>
+            <div className="form-row">
             Street address
             <p className="errors">{errors.address}</p>
+
+            </div>
             <input
               type="text"
               placeholder="Address"
@@ -138,9 +111,15 @@ const UpdateSpotForm = () => {
             />
           </label>
 
+
+        <div className="form-row">
+
           <label>
+            <div className="form-row">
+
             City
             <p className="errors">{errors.city}</p>
+            </div>
             <input
               type="text"
               placeholder="City"
@@ -150,8 +129,10 @@ const UpdateSpotForm = () => {
           </label>
 
           <label>
+          <div className="form-row">
             State
             <p className="errors">{errors.state}</p>
+            </div>
             <input
               type="text"
               placeholder="State"
@@ -159,6 +140,8 @@ const UpdateSpotForm = () => {
               onChange={updateState}
             />
           </label>
+
+        </div>
         </section>
 
         <section className="description">
@@ -206,47 +189,9 @@ const UpdateSpotForm = () => {
           <p className="errors">{errors.price}</p>
         </section>
 
-        <section className="spot-images">
-          <h2>Liven up your spot with photos</h2>
-          <p>Submit a link to at least one photo to publish your spot.</p>
-          <input
-            type="text"
-            placeholder="Preview Image URL"
-            value={urls[0] || ""}
-            onChange={updateUrls}
-          />
-          <p className="errors">{errors.urls}</p>
-          <input
-            type="text"
-            placeholder="Image URL"
-            value={urls[1] || ""}
-            onChange={updateUrls}
-          />
-          <p className="errors">{errors.image}</p>
-          <input
-            type="text"
-            placeholder="Image URL"
-            value={urls[2] || ""}
-            onChange={updateUrls}
-          />
-          <p className="errors">{errors.image}</p>
-          <input
-            type="text"
-            placeholder="Image URL"
-            value={urls[3] || ""}
-            onChange={updateUrls}
-          />
-          <p className="errors">{errors.image}</p>
-          <input
-            type="text"
-            placeholder="Image URL"
-            value={urls[4] || ""}
-            onChange={updateUrls}
-          />
-          <p className="errors">{errors.image}</p>
-        </section>
 
-        <button type="submit" disabled={!country || !address || !city || !state || !description || !name || !price || !urls[0] }>Update your Spot</button>
+
+        <button type="submit" disabled={!country || !address || !city || !state || !description || !name || !price }>Update your Spot</button>
 
       </form>
     </div>
