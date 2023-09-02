@@ -50,9 +50,9 @@ const ManageSpots = () => {
         {!spots ? (
           <NavLink to="/spots">Create a New Spot</NavLink>
         ) : (
-          <div>
+          <div className="spot-tile-list">
             {spots.map((spot) => (
-              <div>
+              <div className="spot-card">
                 <NavLink key={spot.id} to={`/spots/${spot.id}`}>
                   <img
                     className="previmg"
@@ -60,15 +60,23 @@ const ManageSpots = () => {
                     alt="prev_img"
                     title={`${spot.name}`}
                   />
+                  <div className="spot-info">
+                    <div className="spot-details">
                   <p>{`${spot.city}, ${spot.state}`}</p>
-                  <p>{getRatingOrNew(spot.avgRating)}</p>{" "}
                   <p>${spot.price} night</p>
+                    </div>
+                    <div className="spot-ratings">
+            <i class="fa-solid fa-star"></i> {getRatingOrNew(spot.avgRating)}
+            </div>
+
+                  </div>
+
                 </NavLink>
 
-                <button onClick={() => handleUpdateClick(spot.id)}>
+                <button className="mng-update" onClick={() => handleUpdateClick(spot.id)}>
                   Update
                 </button>
-                <button onClick={() => handleDeleteClick(spot.id)}>
+                <button className="mng-delete" onClick={() => handleDeleteClick(spot.id)}>
                   Delete
                 </button>
               </div>
@@ -80,7 +88,7 @@ const ManageSpots = () => {
       <Modal
         isOpen={showDeleteModal}
         onRequestClose={handleCancelDelete}
-        className="modal"
+        className="mng-modal"
         overlayClassName="overlay"
       >
         <div className="modal-content">
@@ -90,13 +98,13 @@ const ManageSpots = () => {
           </p>
           <div className="modal-buttons">
             <button
-              className="modal-button delete-button"
+              className="modal-delete-button"
               onClick={handleConfirmDelete}
             >
               Yes (Delete Spot)
             </button>
             <button
-              className="modal-button cancel-button"
+              className="modal-cancel-button"
               onClick={handleCancelDelete}
             >
               No (Keep Spot)

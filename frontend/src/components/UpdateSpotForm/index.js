@@ -17,7 +17,6 @@ const UpdateSpotForm = () => {
   const [name, setName] = useState(spot?.name);
   const [description, setDescription] = useState(spot?.description);
   const [price, setPrice] = useState(spot?.price);
-  const [prevUrl, setPrevUrl] = useState(spot?.previewImage);
   const [errors, setErrors] = useState({});
 
   const updateAddress = (e) => setAddress(e.target.value);
@@ -75,9 +74,9 @@ const UpdateSpotForm = () => {
 
   return (
     <div>
-      <form className="edit-spot-form" onSubmit={handleSubmit}>
+      <form className="spot-form" onSubmit={handleSubmit}>
         <section className="location">
-          <h2>Update your Spot</h2>
+          <h1>Update your Spot</h1>
           <p>Where's your place located?</p>
           <p>
             Guests will only get your exact address once they booked a
@@ -85,8 +84,11 @@ const UpdateSpotForm = () => {
           </p>
 
           <label>
+            <div className="form-row">
             Country
             <p className="errors">{errors.country}</p>
+
+            </div>
             <input
               type="text"
               placeholder="Country"
@@ -96,8 +98,11 @@ const UpdateSpotForm = () => {
           </label>
 
           <label>
+            <div className="form-row">
             Street address
             <p className="errors">{errors.address}</p>
+
+            </div>
             <input
               type="text"
               placeholder="Address"
@@ -106,9 +111,15 @@ const UpdateSpotForm = () => {
             />
           </label>
 
+
+        <div className="form-row">
+
           <label>
+            <div className="form-row">
+
             City
             <p className="errors">{errors.city}</p>
+            </div>
             <input
               type="text"
               placeholder="City"
@@ -118,8 +129,10 @@ const UpdateSpotForm = () => {
           </label>
 
           <label>
+          <div className="form-row">
             State
             <p className="errors">{errors.state}</p>
+            </div>
             <input
               type="text"
               placeholder="State"
@@ -127,6 +140,8 @@ const UpdateSpotForm = () => {
               onChange={updateState}
             />
           </label>
+
+        </div>
         </section>
 
         <section className="description">
@@ -176,7 +191,7 @@ const UpdateSpotForm = () => {
 
 
 
-        <button type="submit" disabled={!country || !address || !city || !state || !description || !name || !price || !prevUrl }>Update your Spot</button>
+        <button type="submit" disabled={!country || !address || !city || !state || !description || !name || !price }>Update your Spot</button>
 
       </form>
     </div>

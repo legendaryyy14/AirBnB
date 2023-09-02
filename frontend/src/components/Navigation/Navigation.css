@@ -45,7 +45,7 @@ button {
 }
 
 /* Navigation.css */
-.modal {
+/* .modal {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -54,7 +54,7 @@ button {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-}
+} */
 /* ... other styles ... */
 
 /* Flex container for navigation elements */
@@ -120,33 +120,13 @@ div {
   flex-direction: column;
   display: flex-box;
 } */
-.login-modal {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 
-.login-modal h1 {
-  margin-top: 20px; /* Add margin for spacing */
-}
 
-.login-modal form {
-  display: grid;
-  grid-template-columns: 1fr; /* Single column grid */
-  gap: 10px; /* Gap between inputs and buttons */
-  align-items: center; /* Center items vertically */
-}
-
-.login-btn,
-.demo-user {
-  width: 100%; /* Make buttons take full width of the container */
-}
-
-.form-row {
+/* .form-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
+} */
 
 /* Add media query for smaller screens */
 @media (max-width: 600px) {

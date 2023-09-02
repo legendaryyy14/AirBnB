@@ -13,7 +13,7 @@ const ReviewForm = ({setReviewForm}) => {
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(0);
 
-  const reviewsObject = useSelector((state) => state.spots);
+  // const reviewsObject = useSelector((state) => state.spots);
   // const reviews = reviewsObject.reviews ? reviewsObject.reviews : []
   const reviews = useSelector((state) => state.spots.reviews ? state.spots.reviews : []);
 
@@ -32,9 +32,8 @@ const ReviewForm = ({setReviewForm}) => {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (comment.length >= 10 && rating > 0) {
 
+    if (comment.length >= 10 && rating > 0) {
       const payload = {
         userId: sessionUser?.id,
         spotId,
@@ -67,17 +66,16 @@ const ReviewForm = ({setReviewForm}) => {
               className={`star ${value <= rating ? 'filled' : 'empty'}`}
               onClick={() => handleRatingChange({ target: { value } })}
             >
-              ★
+               <i className="fa-solid fa-star"></i>
             </span>
           ))}
-          Stars
         </div>
+          Stars
       </div>
-          <button type="submit" disabled={comment.length < 10 || rating === 0}>
+          <button className="submit-review-btn" type="submit" disabled={comment.length < 10 || rating === 0}>
             Submit Your Review
           </button>
         </form>
-        <button onClick={() => setReviewForm(false)}>Close</button>
     </div>
   );
 };

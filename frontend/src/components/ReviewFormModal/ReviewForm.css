@@ -11,5 +11,32 @@
   }
 
   .filled {
-    color: #ff9800; /* Color for filled stars */
+    color: #020201; /* Color for filled stars */
+  }
+
+  textarea {
+    width: 210px;
+    height: 100px;
+    margin-top: 0px;
+    background-color: rgb(230, 233, 248);
+    border: 2px solid black;
+
+}
+
+.submit-review-btn {
+    background-color: #f6f2f2;
+    color: rgb(159, 153, 153);
+    border: 1px solid rgb(144, 143, 143);
+    padding: 5px;
+    width: 70%;
+    cursor: pointer;
+    box-shadow: 0px 2px 4px rgb(95, 94, 94);
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 30px;
+  }
+
+  .submit-review-btn:hover {
+    background-color: #db6365;
+    color: white;
   }

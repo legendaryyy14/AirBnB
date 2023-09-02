@@ -57,9 +57,10 @@ const SpotDetail = () => {
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic" rel="stylesheet" />
 
       <h1>{spot?.name}</h1>
-      <p>
+      <p id="spot-deets">
         {spot?.city}, {spot?.state}, {spot?.country}
       </p>
+
       <div className="image-section">
       <img className="prev-img" src={`${previewImage}`} alt="spot_img" />
                 <div className="image-columns">
@@ -68,10 +69,7 @@ const SpotDetail = () => {
                   ))}
                 </div>
       </div>
-      <div className="description">
 
-
-      </div>
       <div className="middle-section">
         <div>
         <h2 >
@@ -141,6 +139,7 @@ const SpotDetail = () => {
           <Modal
             isOpen={showReviewForm}
             onRequestClose={() => setReviewForm(false)}
+            className="review-modal"
           >
             <ReviewForm setReviewForm={setReviewForm}/>
           </Modal>
@@ -157,11 +156,11 @@ const SpotDetail = () => {
                 .reverse()
                 .map((review) => (
                   <div className="individual-review" key={review?.id}>
-                    <p>{review?.User?.firstName}</p>
-                    <p>{formatMonthAndYear(review?.updatedAt)}</p>
-                    <p>{review?.review}</p>
+                    <p id="first-name">{review?.User?.firstName}</p>
+                    <p id="date">{formatMonthAndYear(review?.updatedAt)}</p>
+                    <p id="review">{review?.review}</p>
                     {sessionUser && sessionUser?.id === review?.User?.id && (
-                    <button className="delete-button" onClick={() => handleDeleteReview(review?.id)}>Delete</button>
+                    <button className="first-delete-button" onClick={() => handleDeleteReview(review?.id)}>Delete</button>
                   )}
                   </div>
                 ))}
@@ -173,16 +172,19 @@ const SpotDetail = () => {
         isOpen={showDeleteModal}
         onRequestClose={() => setShowDeleteModal(false)}
         contentLabel="Confirm Delete"
-        className="modal"
+        className="rev-delete-modal"
       >
         <h2>Confirm Delete</h2>
         <p>Are you sure you want to delete this review?</p>
+        <div className="modal-buttons">
         <button onClick={handleConfirmDelete} className="delete-button">
           Yes (Delete Review)
         </button>
         <button onClick={() => setShowDeleteModal(false)} className="cancel-button">
           No (Keep Review)
         </button>
+
+        </div>
       </Modal>
       </div>
     </div>

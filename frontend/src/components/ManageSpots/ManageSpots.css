@@ -1,14 +1,47 @@
-/* Add this CSS to properly center the modal */
-.modal {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+.mng-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 20%;
+  background-color: white;
+  border-radius: 10px;
+  border: 3px solid black;
   }
+.modal-title {
+  margin-left: 60px;
+}
+  .modal-buttons {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-buttons button {
+    margin: 5px;
+  }
+
+  .modal-delete-button{
+    background-color: #dd5d5f;
+    color: white;
+    border: 1px solid black;
+    padding: 5px;
+    width: auto;
+    cursor: pointer;
+    box-shadow: 0px 2px 4px rgb(1, 0, 0);
+    margin-bottom: 20px;
+    margin-left: 25px;
+  }
+  .modal-cancel-button {
+    background-color: #4b4848;
+    color: white;
+    border: 1px solid black;
+    padding: 5px;
+    width: auto;
+    cursor: pointer;
+    box-shadow: 0px 2px 4px rgb(1, 0, 0);
+    margin-bottom: 20px;
+    margin-left: 25px;
+  }
+
 
   .overlay {
     position: fixed;
@@ -20,4 +53,5 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
   }

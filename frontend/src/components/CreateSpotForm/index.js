@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { fetchSpots, fetchOneSpot, createSpot, createSpotImage } from "../../store/spots";
+import "./CreateSpotForm.css"
 
 const CreateSpotForm = () => {
   const dispatch = useDispatch();
@@ -121,16 +122,19 @@ const CreateSpotForm = () => {
     <div>
       <form className="spot-form" onSubmit={handleSubmit}>
         <section className="location">
-          <h2>Create a New Spot</h2>
-          <p>Where's your place located?</p>
+          <h1>Create a New Spot</h1>
+          <h2>Where's your place located?</h2>
           <p>
             Guests will only get your exact address once they booked a
             reservation.
           </p>
 
           <label>
+            <div className="form-row">
             Country
             <p className="errors">{errors.country}</p>
+
+            </div>
             <input
               type="text"
               placeholder="Country"
@@ -140,8 +144,11 @@ const CreateSpotForm = () => {
           </label>
 
           <label>
+            <div className="form-row">
             Street address
             <p className="errors">{errors.address}</p>
+            </div>
+
             <input
               type="text"
               placeholder="Address"
@@ -149,10 +156,14 @@ const CreateSpotForm = () => {
               onChange={updateAddress}
             />
           </label>
+          <div className="form-row">
 
           <label>
+            <div className="form-row">
             City
             <p className="errors">{errors.city}</p>
+            </div>
+
             <input
               type="text"
               placeholder="City"
@@ -162,8 +173,11 @@ const CreateSpotForm = () => {
           </label>
 
           <label>
+            <div className="form-row">
             State
             <p className="errors">{errors.state}</p>
+            </div>
+
             <input
               type="text"
               placeholder="State"
@@ -171,6 +185,7 @@ const CreateSpotForm = () => {
               onChange={updateState}
             />
           </label>
+          </div>
         </section>
 
         <section className="description">
