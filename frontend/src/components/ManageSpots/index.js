@@ -47,7 +47,7 @@ const ManageSpots = () => {
     <div>
       <h1>Manage Spots</h1>
       <div>
-        {!spots ? (
+        {spots.length === 0 ? (
           <NavLink to="/spots">Create a New Spot</NavLink>
         ) : (
           <div className="spot-tile-list">
