@@ -30,8 +30,50 @@ module.exports = {
         email: 'user2@user.io',
         username: 'FakeUser2',
         hashedPassword: bcrypt.hashSync('password3')
-      }
-    ], {});
+      },
+     {
+      firstName: 'Alice',
+      lastName: 'Johnson',
+      email: 'user3@user.io',
+      username: 'CoolUser3',
+      hashedPassword: bcrypt.hashSync('password4')
+    },
+    {
+      firstName: 'Eva',
+      lastName: 'Smith',
+      email: 'user4@user.io',
+      username: 'AwesomeUser4',
+      hashedPassword: bcrypt.hashSync('password5')
+    },
+    {
+      firstName: 'Chris',
+      lastName: 'Brown',
+      email: 'user5@user.io',
+      username: 'SuperUser5',
+      hashedPassword: bcrypt.hashSync('password6')
+    },
+    {
+      firstName: 'Mia',
+      lastName: 'Johnson',
+      email: 'user6@user.io',
+      username: 'MiaUser6',
+      hashedPassword: bcrypt.hashSync('password7')
+    },
+    {
+      firstName: 'Alex',
+      lastName: 'Williams',
+      email: 'user7@user.io',
+      username: 'AlexUser7',
+      hashedPassword: bcrypt.hashSync('password8')
+    },
+    {
+      firstName: 'Daniel',
+      lastName: 'Clark',
+      email: 'user8@user.io',
+      username: 'DanUser8',
+      hashedPassword: bcrypt.hashSync('password9')
+    }
+  ], {});
   },
 
   down: async (queryInterface, Sequelize) => {
