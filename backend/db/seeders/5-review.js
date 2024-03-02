@@ -37,6 +37,48 @@ module.exports = {
       spotId: 1,
       review: "amazing!",
       stars: 3
+    },
+    {
+      userId: 8,
+      spotId: 4,
+      review: "Awesome experience!",
+      stars: 5
+    },
+    {
+      userId: 4,
+      spotId: 5,
+      review: "Fantastic place!",
+      stars: 4.5
+    },
+    {
+      userId: 5,
+      spotId: 6,
+      review: "Lovely spot with great views!",
+      stars: 4
+    },
+    {
+      userId: 6,
+      spotId: 7,
+      review: "Highly recommended!",
+      stars: 5
+    },
+    {
+      userId: 7,
+      spotId: 8,
+      review: "Nice location, clean and cozy!",
+      stars: 4.5
+    },
+    {
+      userId: 10,
+      spotId: 9,
+      review: "Enjoyed my stay, will come back!",
+      stars: 4
+    },
+    {
+      userId: 9,
+      spotId: 10,
+      review: "Perfect spot for a getaway!",
+      stars: 5
     }
    ], {})
   },
