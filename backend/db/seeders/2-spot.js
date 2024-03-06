@@ -138,7 +138,7 @@ module.exports = {
         avgRating: 4.7,
       },
       {
-        ownerId: 10,
+        ownerId: 1,
         address: "654 Mountain Ave",
         city: "Denver",
         state: "Colorado",
