@@ -136,7 +136,7 @@ module.exports = {
       spotId: 8
     },
     {
-      url: "https://res.cloudinary.com/dbnngk5fd/image/upload/v1693084182/pexels-photo-2724749_r7i2ng.webp",
+      url: "https://media.designcafe.com/wp-content/uploads/2022/07/29185240/industrial-rustic-living-room-in-earthy-tones.jpg",
       preview: false,
       spotId: 9
     },
@@ -146,12 +146,12 @@ module.exports = {
       spotId: 7
     },
     {
-      url: "https://res.cloudinary.com/dbnngk5fd/image/upload/v1693084182/pexels-photo-276724_vyzstu.jpg",
+      url: "https://hips.hearstapps.com/hmg-prod/images/living-room-ideas-caroline-turner-orchardlane01-copy-1670968014.jpeg",
       preview: false,
       spotId: 8
     },
     {
-      url: "https://res.cloudinary.com/dbnngk5fd/image/upload/v1692757511/samples/balloons.jpg",
+      url: "https://hgtvhome.sndimg.com/content/dam/images/hgtv/fullset/2023/7/19/3/DOTY2023_Dramatic-Before-And-Afters_Hidden-Hills-11.jpg.rend.hgtvcom.1280.720.suffix/1689786863909.jpeg",
       preview: false,
       spotId: 9
     },
