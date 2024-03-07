@@ -156,17 +156,17 @@ module.exports = {
       spotId: 9
     },
     {
-      url: "https://res.cloudinary.com/dbnngk5fd/image/upload/v1693084183/pexels-photo-1080696_zaryd5.jpg",
+      url: "https://media.architecturaldigest.com/photos/64f71af50a84399fbdce2f6a/16:9/w_2560%2Cc_limit/Living%2520with%2520Lolo%2520Photo%2520Credit_%2520Life%2520Created%25204.jpg",
       preview: false,
       spotId: 10
     },
     {
-      url: "https://res.cloudinary.com/dbnngk5fd/image/upload/v1693084182/pexels-photo-276724_vyzstu.jpg",
+      url: "https://www.bhg.com/thmb/MaQDVndcD-FF3qtf9e50rmfVml4=/4000x0/filters:no_upscale():strip_icc()/bhg-modern-kitchen-8RbSHoA8aKT9tEG-DcYr56-039892da05774ea78f8682b3f693bb5d.jpg",
       preview: false,
       spotId: 10
     },
     {
-      url: "https://res.cloudinary.com/dbnngk5fd/image/upload/v1692757511/samples/balloons.jpg",
+      url: "https://res.cloudinary.com/brickandbatten/image/upload/c_scale,w_464,h_324,dpr_2/f_auto,q_auto/v1641000863/wordpress_assets/22826-ModContemporary-Accents_w-GauntletGray-a-ok.jpg?_i=AA",
       preview: false,
       spotId: 10
     }
